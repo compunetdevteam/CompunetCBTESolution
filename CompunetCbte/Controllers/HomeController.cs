@@ -1,30 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using CompunetCbte.Models;
+using CompunetCbte.ViewModels;
 
-namespace CompunetCbte.Controllers
+namespace SwiftKampus.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly OnlineCbte _db = new OnlineCbte();
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult About()
+        public ActionResult SchoolSetUp()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult SchoolSetUp(SetUpVm model)
         {
-            ViewBag.Message = "Your contact page.";
+            string _FileName = String.Empty;
+            if (model.File?.ContentLength > 0)
+            {
+                _FileName = Path.GetFileName(model.File.FileName);
+                string _path = HostingEnvironment.MapPath("~/Content/Images/") + _FileName;
+                var directory = new DirectoryInfo(HostingEnvironment.MapPath("~/Content/Images/"));
+                if (directory.Exists == false)
+                {
+                    directory.Create();
+                }
+                model.File.SaveAs(_path);
+            }
 
-            return View();
+
+            //ViewBag.Message = "File upload failed!!";
+            //return View(model);
+
+            Configuration objConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+            AppSettingsSection objAppsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
+            //Edit
+            if (objAppsettings != null)
+            {
+                objAppsettings.Settings["SchoolName"].Value = model.SchoolName;
+                objAppsettings.Settings["SchoolTheme"].Value = model.SchoolTheme.ToString();
+                if (!String.IsNullOrEmpty(_FileName))
+                {
+                    objAppsettings.Settings["SchoolImage"].Value = _FileName;
+                }
+                objConfig.Save();
+            }
+            return View("Index");
         }
+
+       
     }
 }

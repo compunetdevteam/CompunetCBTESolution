@@ -1,44 +1,522 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @System.Configuration.ConfigurationManager.AppSettings["SchoolName"]</title>
+
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <meta name="keywords" content="your,keywords">
+    <meta name="description" content="Short explanation about this website">
+    <!-- END META -->
+    <!-- BEGIN STYLESHEETS -->
+    
     @Styles.Render("~/Content/css")
+    @*@Styles.Render("~/Content/fullcalendarcss")*@
+   
+    @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/modernizr")
 
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/bootstrap.css?1422792965"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/materialadmin.css?1425466319"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/font-awesome.min.css?1422529194"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/material-design-iconic-font.min.css?1421434286"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/summernote/summernote.css?1425218701"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/rickshaw/rickshaw.css?1422792967"/>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/morris/morris.core.css?1420463396"/>
+    
+    <!-- END STYLESHEETS -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="../../assets/js/libs/utils/html5shiv.js?1403934957"></script>
+        <script type="text/javascript" src="../../assets/js/libs/utils/respond.min.js?1403934956"></script>
+    <![endif]-->
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+<body class="menubar-hoverable header-fixed menubar-pin ">
+   
+<!-- BEGIN HEADER-->
+<header id="header">
+    <div class="headerbar">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="headerbar-left">
+            <ul class="header-nav header-nav-options">
+                <li class="header-nav-brand">
+                    <div class="brand-holder">
+                        <a href="#">
+                            @{
+                                var schoolImage = @System.Configuration.ConfigurationManager.AppSettings["SchoolImage"];
+                            }
+                            <img class="img-circle" src="~/Content/Images/@schoolImage"/>
+                            <span class="text-lg text-bold text-primary">@System.Configuration.ConfigurationManager.AppSettings["SchoolName"]</span>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <a class="btn btn-icon-toggle menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="headerbar-right">
+                
+            <ul class="header-nav header-nav-options">
+                @if (!Request.IsAuthenticated)
+                {
+                    @*<li>@Html.ActionLink("Staff Registration", "RegisterStaff", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                    <li>@Html.ActionLink("Student Registration", "RegisterStudent", "Account", routeValues: null, htmlAttributes: new { id = "registerLink"} )</li>*@
+                    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+
+                }
+            </ul><!--end .header-nav-options -->
+            <ul class="header-nav header-nav-profile">
+
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+                               
+                            @if (User.IsInRole("Student"))
+                            {
+                                <img src="@Url.Action("RenderImage", "Students", new { studentId = User.Identity.GetUserName()})" width="100" height="100" />
+                                <span class="profile-info">
+                                    Hi, Student
+                                    <small>@User.Identity.GetUserName()</small>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="profile-info">
+                                    Hi,
+                                    <small>@User.Identity.GetUserName()</small>
+                                </span>
+                            }
+
+                        </a>
+                        <ul class="dropdown-menu animation-dock">
+                            <li class="dropdown-header">Config</li>
+                            <li>@Html.ActionLink("Manage Profile", "Index", "Manage")</li>
+                            <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage")</li>
+                            <li><a href="../../html/pages/calendar.html">School Events</a></li>
+                            <li class="divider"></li>
+                            <li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                    
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()"> <i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
+                            }
+
+                        </ul><!--end .dropdown-menu -->
+                    </li><!--end .dropdown -->
+                }
+                else
+                {
+                        
+                }
+            </ul><!--end .header-nav-profile -->
+            
+        </div><!--end #header-navbar-collapse -->
+    </div>
+</header>
+<!-- END HEADER-->
+<!-- BEGIN BASE-->
+<div id="base">
+
+<!-- BEGIN OFFCANVAS LEFT -->
+<div class="offcanvas">
+</div><!--end .offcanvas-->
+<!-- END OFFCANVAS LEFT -->
+<!-- BEGIN CONTENT-->
+<div id="content">
+
+    <!-- BEGIN BLANK SECTION -->
+    <section>
+               
+        <div class="section-body">
+            @RenderBody()
+        </div><!--end .section-body -->
+    </section>
+
+    <!-- BEGIN BLANK SECTION -->
+</div><!--end #content-->
+<!-- END CONTENT -->
+@if (Request.IsAuthenticated && User.IsInRole("Student"))
+{
+    <!-- BEGIN MENUBAR-->
+    <div id="menubar" class="menubar-inverse ">
+    <div class="menubar-fixed-panel">
+        <div>
+            <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <div class="expanded">
+            <a href="@Url.Action("Index", "Home")">
+                <span class="text-lg text-bold text-primary ">SWIFT&nbsp;CAMPUS</span>
+            </a>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    <div class="menubar-scroll-panel">
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <!-- BEGIN MAIN MENU -->
+    <ul id="main-menu" class="gui-controls">
+
+    <!-- BEGIN DASHBOARD -->
+    <li>
+        <a href="@Url.Action("StudentDashboard", "Students")">
+            <div class="gui-icon"><i class="md md-home"></i></div>
+            <span class="title">Student Dashboard</span>
+        </a>
+    </li><!--end /menu-li -->
+    <!-- END DASHBOARD -->
+      
+    <!-- BEGIN Student Management -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="md md-person"></i></div>
+            <span class="title">Manage Profile</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Manage Student</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Edit Profile", "Edit", "Students")</li>
+                    <li>@Html.ActionLink("View Profile", "Details", "Students")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Manage Account</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Settings", "Index", "Manage")</li>
+                    <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+                           
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END student Management -->
+                
+    <!-- BEGIN CBTE -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="md md-computer"></i></div>
+            <span class="title">CBTE Management</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+               
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Take Exam</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Select Paper", "SelectSubject", "TakeExam")</li>
+                    <li>@Html.ActionLink("Check Previous Exam", "SelectSubject", "TakeExam")</li>
+
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END CBTE -->
+                    
+  
+    </ul>
+      
+    <!-- END MAIN MENU -->
+
+    <div class="menubar-foot-panel">
+        <small class="no-linebreak hidden-folded">
+            <span class="opacity-75">Copyright &copy; @DateTime.Now.Year</span> <strong class="text-danger"> CompunetLimited</strong>
+        </small>
+    </div>
+    </div><!--end .menubar-scroll-panel-->
+    </div><!--end #menubar-->
+    <!-- END MENUBAR -->
+}
+else if (Request.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <!-- BEGIN MENUBAR-->
+    <div id="menubar" class="menubar-inverse ">
+    <div class="menubar-fixed-panel">
+        <div>
+            <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <div class="expanded">
+            <a href="@Url.Action("Index", "Home")">
+                <span class="text-lg text-bold text-primary ">SWIFT&nbsp;CAMPUS</span>
+            </a>
+        </div>
+    </div>
+    <div class="menubar-scroll-panel">
+
+    <!-- BEGIN MAIN MENU -->
+    <ul id="main-menu" class="gui-controls">
+
+    <!-- BEGIN DASHBOARD -->
+    <li>
+        <a href="@Url.Action("DashBoard", "Home")">
+            <div class="gui-icon"><i class="md md-home"></i></div>
+            <span class="title">Admin Dashboard</span>
+        </a>
+    </li><!--end /menu-li -->
+    <!-- END DASHBOARD -->
+    <!-- BEGIN SCHOOL SETUP -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="md md-email"></i></div>
+            <span class="title">School Settings</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+            <li>@Html.ActionLink("School Name", "SchoolSetup", "Home")</li>
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Department</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Department", "Create", "Departments")</li>
+                    <li>@Html.ActionLink("List Departments", "Index", "Departments")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Session</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Session", "Create", "Sessions")</li>
+                    <li>@Html.ActionLink("View Sessions", "Index", "Sessions")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Semester</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Semester", "Create", "Semesters")</li>
+                    <li>@Html.ActionLink("List Semesters", "Index", "Semesters")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END SCHOOL SETUP -->
+    <!-- BEGIN Student Management -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="md md-person"></i></div>
+            <span class="title">Manage Student/Staff</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Manage Student</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Student", "Create", "Students")</li>
+                    <li>@Html.ActionLink("List Students", "Index", "Students")</li>
+                    <li>@Html.ActionLink("Excel Upload", "UploadStudent", "Students")</li>
+                    @*<li><a href="#">Excel Upload</a></li>*@
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Manage Staff</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Student", "Create", "Staffs")</li>
+                    <li>@Html.ActionLink("List Students", "Index", "Staffs")</li>
+                    <li>@Html.ActionLink("Excel Upload", "UploadStaff", "Staffs")</li>
+                    @*<li><a href="#">Excel Upload</a></li>*@
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+                           
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END student Management -->
+   
+
+    <!-- BEGIN Course -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="fa fa-table"></i></div>
+            <span class="title">Course Management</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+            <li>@Html.ActionLink("Add New Course", "Create", "Courses")</li>
+            <li>@Html.ActionLink("View Course", "Index", "Courses")</li>
+          
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END Course -->
+                
+    <!-- BEGIN CBTE -->
+    <li class="gui-folder">
+        <a>
+            <div class="gui-icon"><i class="md md-computer"></i></div>
+            <span class="title">CBTE Management</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Manage Questions</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Questions", "Create", "QuestionAnswers")</li>
+                    <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
+
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Exam Type</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add Exam Type", "Create", "ExamTypes")</li>
+                    <li>@Html.ActionLink("View Exam Types ", "Index", "ExamTypes")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Exam Rule</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Create Rule", "Create", "ExamRules")</li>
+                    <li>@Html.ActionLink("View Rules ", "Index", "ExamRules")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Exam Settings</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Schedule Exam", "Create", "ExamSettings")</li>
+                    <li>@Html.ActionLink("View Exam Schedule", "Index", "ExamSettings")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <li class="gui-folder">
+                <a href="javascript:void(0);">
+                    <span class="title">Take Exam</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Select Paper", "SelectSubject", "TakeExam")</li>
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+
+        </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+    <!-- END CBTE -->
+    <div class="menubar-foot-panel">
+        <small class="no-linebreak hidden-folded">
+            <span class="opacity-75">Copyright &copy; @DateTime.Now.Year</span> <strong class="text-danger"> CompunetLimited</strong>
+        </small>
+    </div>
+    </div><!--end .menubar-scroll-panel-->
+    </div><!--end #menubar-->
+    <!-- END MENUBAR -->
+}
+else
+{
+
+}
+
+
+
+
+
+</div><!--end #base-->
+<!-- END BASE -->
+<!-- BEGIN JAVASCRIPT -->
+
+<script src="~/assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
+<script src="~/assets/js/libs/ckeditor/ckeditor.js"></script>
+<script src="~/assets/js/libs/ckeditor/adapters/jquery.js"></script>
+<script src="~/assets/js/libs/summernote/summernote.min.js"></script>
+
+
+<script src="~/assets/js/core/source/AppNavigation.js"></script>
+<script src="~/assets/js/core/demo/DemoFormEditors.js"></script>
+
+
+
+<script src="~/LCSK/assets/js/jquery-2.1.1.min.js"></script>
+<script src="/lcsk/assets/js/jquery.signalR-2.1.1.min.js"></script>
+<script src="/signalr/hubs" type="text/javascript"></script>
+<script src="/lcsk/chat.js" type="text/javascript"></script>
+
+
+@*<script type="text/javascript">
+
+
+        //Call the method on pageload
+        $(window).load(function () {
+           // window.alert(5 + 6);
+            var i = "@TempData["UserMessage"]";
+            //window.alert(i);
+            //Disply the modal popup
+            if (i) {
+                $('#simpleModal').modal('show');
+            }
+
+        });
+    </script>*@
+
+
+<script>
+    var i = "@TempData["UserMessage"]";
+   
+    @*// window.alert(i);
+      //alertify.success('@TempData["UserMessage"]');
+
+      //Disply the modal popup*@
+    var check = '@TempData["Title"]'.localeCompare('Success.');
+    var check2 = '@TempData["Title"]'.localeCompare('Error.');
+    var check3 = '@TempData["Title"]'.localeCompare('Default.');
+    if (check === 0) {
+        alertify.success('@TempData["UserMessage"]');
+    } else if(check2 === 0) {
+        alertify.error('@TempData["UserMessage"]');
+    }
+    else if (check3 === 0) {
+        alertify.deafult('@TempData["UserMessage"]');
+    }
+
+
+
+</script>
+   
+<!-- END JAVASCRIPT -->
+@Scripts.Render("~/bundles/jquery")
+@*@Scripts.Render("~/bundles/fullcalendarjs")*@
+
+@RenderSection("scripts", required: false)
 </body>
 </html>

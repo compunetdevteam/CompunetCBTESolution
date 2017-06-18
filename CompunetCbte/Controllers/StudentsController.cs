@@ -1,0 +1,280 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using CompunetCbte.Models;
+using CompunetCbte.Services;
+using ExamSolutionModel;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
+
+namespace CompunetCbte.Controllers
+{
+    public class StudentsController : Controller
+    {
+        private OnlineCbte db = new OnlineCbte();
+
+        // GET: Students
+        public async Task<ActionResult> Index()
+        {
+            var students = db.Students.Include(s => s.Department);
+            return View(await students.ToListAsync());
+        }
+
+        // GET: Students/Details/5
+        public async Task<ActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);
+        }
+
+        // GET: Students/Create
+        public ActionResult Create()
+        {
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode");
+            return View();
+        }
+
+        // POST: Students/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "StudentId,DepartmentId,FirstName,MiddleName,LastName,Gender,Email,PhoneNumber,Passport")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Students.Add(student);
+                await db.SaveChangesAsync();
+                var store = new UserStore<ApplicationUser>(db);
+                var manager = new UserManager<ApplicationUser>(store);
+                var user = new ApplicationUser { UserName = student.FullName, Email = student.Email, EmailConfirmed = true };
+
+                manager.Create(user, student.Password);
+                manager.AddToRole(user.Id, "Student");
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            return View(student);
+        }
+
+        // GET: Students/Edit/5
+        public async Task<ActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            return View(student);
+        }
+
+        // POST: Students/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "StudentId,DepartmentId,FirstName,MiddleName,LastName,Gender,Email,PhoneNumber,Passport")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(student).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            return View(student);
+        }
+
+        // GET: Students/Delete/5
+        public async Task<ActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);
+        }
+
+        // POST: Students/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(string id)
+        {
+            Student student = await db.Students.FindAsync(id);
+            db.Students.Remove(student);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        public async Task<ActionResult> RenderImage(string studentId)
+        {
+            Student student = await db.Students.FindAsync(studentId);
+
+            byte[] photoBack = student.Passport;
+
+            return File(photoBack, "image/png");
+        }
+
+        public ActionResult UploadStudent()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> UploadStudent(HttpPostedFileBase excelfile)
+        {
+            if (excelfile == null || excelfile.ContentLength == 0)
+            {
+                ViewBag.Error = "Please Select a excel file <br/>";
+                TempData["UserMessage"] = "Please Select a excel file.";
+                TempData["Title"] = "Error.";
+
+                return View("Index");
+            }
+            HttpPostedFileBase file = Request.Files["excelfile"];
+            if (excelfile.FileName.EndsWith("xls") || excelfile.FileName.EndsWith("xlsx"))
+            {
+                string lastrecord = "";
+                int recordCount = 0;
+                string message = "";
+                string fileContentType = file.ContentType;
+                byte[] fileBytes = new byte[file.ContentLength];
+                var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                // Read data from excel file
+                using (var package = new ExcelPackage(file.InputStream))
+                {
+                    ExcelValidation myExcel = new ExcelValidation();
+                    var currentSheet = package.Workbook.Worksheets;
+                    var workSheet = currentSheet.First();
+                    var noOfCol = workSheet.Dimension.End.Column;
+                    var noOfRow = workSheet.Dimension.End.Row;
+                    int requiredField = 10;
+
+                    //string validCheck = myExcel.ValidateExcel(noOfRow, workSheet, requiredField);
+                    //if (!validCheck.Equals("Success"))
+                    //{
+                    //    //string row = "";
+                    //    //string column = "";
+                    //    string[] ssizes = validCheck.Split(' ');
+                    //    string[] myArray = new string[2];
+                    //    for (int i = 0; i < ssizes.Length; i++)
+                    //    {
+                    //        myArray[i] = ssizes[i];
+                    //        // myArray[i] = ssizes[];
+                    //    }
+                    //    string lineError = $"Line/Row number {myArray[0]}  and column {myArray[1]} is not rightly formatted, Please Check for anomalies ";
+                    //    //ViewBag.LineError = lineError;
+                    //    TempData["UserMessage"] = lineError;
+                    //    TempData["Title"] = "Error.";
+                    //    return View();
+                    //}
+                    for (int row = 2; row <= noOfRow; row++)
+                    {
+                        string code = workSheet.Cells[row, 9].Value.ToString().Trim();
+                        var deptCode = await db.Departments.AsNoTracking()
+                            .Where(x => x.DeptCode.ToUpper().Equals(code.ToUpper()))
+                            .FirstOrDefaultAsync();
+                        if (deptCode == null)
+                        {
+                            TempData["UserMessage"] = "The Department code in the excel doesn't exist";
+                            TempData["Title"] = "Error.";
+                            RedirectToAction("UploadStudent");
+                        }
+                        try
+                        {
+                            //ExcelPicture picture = workSheet.Drawings;
+                            var student = new Student()
+                            {
+                                StudentId = workSheet.Cells[row, 1].Value.ToString().Trim(),
+                                FirstName = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                                MiddleName = workSheet.Cells[row, 3].Value.ToString().Trim(),
+                                LastName = workSheet.Cells[row, 4].Value.ToString().Trim(),
+                                Email = workSheet.Cells[row, 5].Value.ToString().Trim(),
+                                PhoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim(),
+                                Gender = workSheet.Cells[row, 7].Value.ToString().Trim(),
+                                Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
+                                DepartmentId = deptCode.DepartmentId,
+                                //Passport = ,
+                            };
+
+                            db.Students.Add(student);
+                            recordCount++;
+                            lastrecord = $"The last Updated record has the Last Name {student.LastName} and First Name {student.FirstName} with Student Id {student.StudentId}";
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.ErrorInfo = "The Department code in the excel doesn't exist";
+                            ViewBag.ErrorMessage = ex.Message;
+                            return View("ErrorException");
+                        }
+                    }
+                    await db.SaveChangesAsync();
+                    message = $"You have successfully Uploaded {recordCount} records...  and {lastrecord}";
+                    TempData["UserMessage"] = message;
+                    TempData["Title"] = "Success.";
+
+                }
+                return RedirectToAction("Index", "Students");
+            }
+
+            ViewBag.Error = $"File type is Incorrect <br/>";
+            return View("Index");
+        }
+
+        public static Image GetImage(string sheetname, ExcelPackage excelFile)
+        {
+            var sheet = excelFile.Workbook.Worksheets[sheetname];
+            var pic = sheet.Drawings["pic_001"] as ExcelPicture;
+            return pic.Image;
+        }
+
+        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+                return ms.ToArray();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+    }
+}

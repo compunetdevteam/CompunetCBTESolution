@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CompunetCbte.Models;
+using ExamSolutionModel;
 
 namespace CompunetCbte.Controllers
 {
@@ -90,6 +91,35 @@ namespace CompunetCbte.Controllers
                     return View(model);
             }
         }
+
+        //// GET: /Account/Register
+        //[AllowAnonymous]
+        //public ActionResult ExamRegistration()
+        //{
+        //    return View();
+        //}
+
+        ////
+        //// POST: /Account/Register
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> AddmissionRegistration(AddmisionRegistrationVm model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = $"{model.LastName} {model.FirstName}", Email = model.Email };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+                   
+        //        }
+        //        AddErrors(result);
+        //    }
+            
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // GET: /Account/VerifyCode

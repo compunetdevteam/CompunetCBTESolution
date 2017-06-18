@@ -1,8 +1,11 @@
 ﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ExamSolutionModel;
+using ExamSolutionModel.CBTE;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using SwiftKampusModel.CBTE;
 
 namespace CompunetCbte.Models
 {
@@ -18,16 +21,33 @@ namespace CompunetCbte.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class OnlineCbte : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
+        public OnlineCbte()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 
-        public static ApplicationDbContext Create()
+        public static OnlineCbte Create()
         {
-            return new ApplicationDbContext();
+            return new OnlineCbte();
         }
+
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<ExamRule> ExamRules { get; set; }
+        public DbSet<QuestionAnswer> QuestionAnswers { get; set; }
+        public DbSet<StudentQuestion> StudentQuestions { get; set; }
+
+        public DbSet<ExamSetting> ExamSettings { get; set; }
+
+        public DbSet<ExamType> ExamTypes { get; set; }
+        public DbSet<ExamLog> ExamLogs { get; set; }
     }
 }
