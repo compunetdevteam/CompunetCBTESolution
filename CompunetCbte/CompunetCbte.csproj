@@ -1668,6 +1668,8 @@
     <Content Include="assets\less\shared\themes\theme-5.less" />
     <Content Include="assets\less\shared\themes\theme-default.less" />
     <Content Include="assets\less\shared\variables.less" />
+    <Content Include="ExcelTemplate\CbteQuestionUpload.xlsx" />
+    <Content Include="ExcelTemplate\CbteStudentTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1778,6 +1780,8 @@
     <Content Include="Views\Home\SchoolSetUp.cshtml" />
     <Content Include="Views\Students\UploadStudent.cshtml" />
     <Content Include="Views\QuestionAnswers\UploadQuestion.cshtml" />
+    <Content Include="Views\TakeExam\FinishExam.cshtml" />
+    <Content Include="Views\Account\UploadStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

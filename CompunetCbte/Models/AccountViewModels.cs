@@ -49,8 +49,8 @@ namespace CompunetCbte.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Display(Name = "Student ID/Email")]
+        //[EmailAddress]
         public string Email { get; set; }
 
         [Required]

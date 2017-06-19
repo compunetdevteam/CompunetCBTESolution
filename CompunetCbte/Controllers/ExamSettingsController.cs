@@ -1,6 +1,7 @@
 ﻿
 using SwiftKampusModel.CBTE;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -55,6 +56,9 @@ namespace SwiftKampus.Controllers
         {
             if (ModelState.IsValid)
             {
+                var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
+                                        .FirstOrDefaultAsync();
+                examSetting.SubjectName = subjectName.CourseName;
                 _db.ExamSettings.Add(examSetting);
                 await _db.SaveChangesAsync();
                 TempData["UserMessage"] = "Exam Settings Added Successfully.";
@@ -98,6 +102,9 @@ namespace SwiftKampus.Controllers
         {
             if (ModelState.IsValid)
             {
+                var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
+                    .FirstOrDefaultAsync();
+                examSetting.SubjectName = subjectName.CourseName;
                 _db.Entry(examSetting).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
                 TempData["UserMessage"] = "Exam Settings Updated Successfully.";

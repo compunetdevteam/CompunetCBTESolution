@@ -265,180 +265,168 @@ else if (Request.IsAuthenticated && User.IsInRole("Admin"))
     <div class="menubar-scroll-panel">
 
     <!-- BEGIN MAIN MENU -->
-    <ul id="main-menu" class="gui-controls">
+        <ul id="main-menu" class="gui-controls">
 
-    <!-- BEGIN DASHBOARD -->
-    <li>
-        <a href="@Url.Action("DashBoard", "Home")">
-            <div class="gui-icon"><i class="md md-home"></i></div>
-            <span class="title">Admin Dashboard</span>
-        </a>
-    </li><!--end /menu-li -->
-    <!-- END DASHBOARD -->
-    <!-- BEGIN SCHOOL SETUP -->
-    <li class="gui-folder">
-        <a>
-            <div class="gui-icon"><i class="md md-email"></i></div>
-            <span class="title">School Settings</span>
-        </a>
-        <!--start submenu -->
-        <ul>
-            <li>@Html.ActionLink("School Name", "SchoolSetup", "Home")</li>
+            <!-- BEGIN DASHBOARD -->
+            <li>
+                <a href="@Url.Action("DashBoard", "Home")">
+                    <div class="gui-icon"><i class="md md-home"></i></div>
+                    <span class="title">Admin Dashboard</span>
+                </a>
+            </li><!--end /menu-li -->
+            <!-- END DASHBOARD -->
+            <!-- BEGIN SCHOOL SETUP -->
             <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Department</span>
+                <a>
+                    <div class="gui-icon"><i class="md md-email"></i></div>
+                    <span class="title">School Settings</span>
                 </a>
                 <!--start submenu -->
                 <ul>
-                    <li>@Html.ActionLink("Add Department", "Create", "Departments")</li>
-                    <li>@Html.ActionLink("List Departments", "Index", "Departments")</li>
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Department</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Add Department", "Create", "Departments")</li>
+                            <li>@Html.ActionLink("List Departments", "Index", "Departments")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+          
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Session</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Add Session", "Create", "Sessions")</li>
+                            <li>@Html.ActionLink("View Sessions", "Index", "Sessions")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Semester</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Add Semester", "Create", "Semesters")</li>
+                            <li>@Html.ActionLink("List Semesters", "Index", "Semesters")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+           
                 </ul><!--end /submenu -->
             </li><!--end /menu-li -->
-
+            <!-- END SCHOOL SETUP -->
+            <!-- BEGIN Student Management -->
             <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Session</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Add Session", "Create", "Sessions")</li>
-                    <li>@Html.ActionLink("View Sessions", "Index", "Sessions")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Semester</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Add Semester", "Create", "Semesters")</li>
-                    <li>@Html.ActionLink("List Semesters", "Index", "Semesters")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-
-        </ul><!--end /submenu -->
-    </li><!--end /menu-li -->
-    <!-- END SCHOOL SETUP -->
-    <!-- BEGIN Student Management -->
-    <li class="gui-folder">
-        <a>
-            <div class="gui-icon"><i class="md md-person"></i></div>
-            <span class="title">Manage Student/Staff</span>
-        </a>
-        <!--start submenu -->
-        <ul>
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
+                <a>
+                    <div class="gui-icon"><i class="md md-person"></i></div>
                     <span class="title">Manage Student</span>
                 </a>
+       
                 <!--start submenu -->
                 <ul>
                     <li>@Html.ActionLink("Add Student", "Create", "Students")</li>
                     <li>@Html.ActionLink("List Students", "Index", "Students")</li>
                     <li>@Html.ActionLink("Excel Upload", "UploadStudent", "Students")</li>
-                    @*<li><a href="#">Excel Upload</a></li>*@
+         
+
                 </ul><!--end /submenu -->
             </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Manage Staff</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Add Student", "Create", "Staffs")</li>
-                    <li>@Html.ActionLink("List Students", "Index", "Staffs")</li>
-                    <li>@Html.ActionLink("Excel Upload", "UploadStaff", "Staffs")</li>
-                    @*<li><a href="#">Excel Upload</a></li>*@
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-                           
-        </ul><!--end /submenu -->
-    </li><!--end /menu-li -->
-    <!-- END student Management -->
+            <!-- END student Management -->
    
 
-    <!-- BEGIN Course -->
-    <li class="gui-folder">
-        <a>
-            <div class="gui-icon"><i class="fa fa-table"></i></div>
-            <span class="title">Course Management</span>
-        </a>
-        <!--start submenu -->
-        <ul>
-            <li>@Html.ActionLink("Add New Course", "Create", "Courses")</li>
-            <li>@Html.ActionLink("View Course", "Index", "Courses")</li>
+            <!-- BEGIN Course -->
+            <li class="gui-folder">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-table"></i></div>
+                    <span class="title">Course Management</span>
+                </a>
+                <!--start submenu -->
+                <ul>
+                    <li>@Html.ActionLink("Add New Course", "Create", "Courses")</li>
+                    <li>@Html.ActionLink("View Course", "Index", "Courses")</li>
           
-        </ul><!--end /submenu -->
-    </li><!--end /menu-li -->
-    <!-- END Course -->
+                </ul><!--end /submenu -->
+            </li><!--end /menu-li -->
+            <!-- END Course -->   
+  
+   
+  
                 
-    <!-- BEGIN CBTE -->
-    <li class="gui-folder">
-        <a>
-            <div class="gui-icon"><i class="md md-computer"></i></div>
-            <span class="title">CBTE Management</span>
-        </a>
-        <!--start submenu -->
-        <ul>
+            <!-- BEGIN CBTE -->
             <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Manage Questions</span>
+                <a>
+                    <div class="gui-icon"><i class="md md-computer"></i></div>
+                    <span class="title">CBTE Management</span>
                 </a>
                 <!--start submenu -->
                 <ul>
-                    <li>@Html.ActionLink("Add Questions", "Create", "QuestionAnswers")</li>
-                    <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Manage Questions</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Add Questions", "Create", "QuestionAnswers")</li>
+                            <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
+                            <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Exam Type</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Add Exam Type", "Create", "ExamTypes")</li>
+                            <li>@Html.ActionLink("View Exam Types ", "Index", "ExamTypes")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Exam Rule</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Create Rule", "Create", "ExamRules")</li>
+                            <li>@Html.ActionLink("View Rules ", "Index", "ExamRules")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Exam Settings</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Schedule Exam", "Create", "ExamSettings")</li>
+                            <li>@Html.ActionLink("View Exam Schedule", "Index", "ExamSettings")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
+                    <li class="gui-folder">
+                        <a href="javascript:void(0);">
+                            <span class="title">Take Exam</span>
+                        </a>
+                        <!--start submenu -->
+                        <ul>
+                            <li>@Html.ActionLink("Select Paper", "SelectSubject", "TakeExam")</li>
+                        </ul><!--end /submenu -->
+                    </li><!--end /menu-li -->
 
                 </ul><!--end /submenu -->
             </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Exam Type</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Add Exam Type", "Create", "ExamTypes")</li>
-                    <li>@Html.ActionLink("View Exam Types ", "Index", "ExamTypes")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Exam Rule</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Create Rule", "Create", "ExamRules")</li>
-                    <li>@Html.ActionLink("View Rules ", "Index", "ExamRules")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Exam Settings</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Schedule Exam", "Create", "ExamSettings")</li>
-                    <li>@Html.ActionLink("View Exam Schedule", "Index", "ExamSettings")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
-            <li class="gui-folder">
-                <a href="javascript:void(0);">
-                    <span class="title">Take Exam</span>
-                </a>
-                <!--start submenu -->
-                <ul>
-                    <li>@Html.ActionLink("Select Paper", "SelectSubject", "TakeExam")</li>
-                </ul><!--end /submenu -->
-            </li><!--end /menu-li -->
+            <!-- END CBTE -->
+     
+  
+            <!-- END MAIN MENU -->
 
-        </ul><!--end /submenu -->
-    </li><!--end /menu-li -->
-    <!-- END CBTE -->
-    <div class="menubar-foot-panel">
-        <small class="no-linebreak hidden-folded">
-            <span class="opacity-75">Copyright &copy; @DateTime.Now.Year</span> <strong class="text-danger"> CompunetLimited</strong>
-        </small>
-    </div>
+            <div class="menubar-foot-panel">
+                <small class="no-linebreak hidden-folded">
+                    <span class="opacity-75">Copyright &copy; @DateTime.Now.Year</span> <strong class="text-danger"> CompunetLimited</strong>
+                </small>
+            </div>
+        </ul>
     </div><!--end .menubar-scroll-panel-->
     </div><!--end #menubar-->
     <!-- END MENUBAR -->
