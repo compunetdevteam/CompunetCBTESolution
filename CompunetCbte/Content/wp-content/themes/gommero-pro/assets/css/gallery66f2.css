@@ -1,0 +1,71 @@
+.gallery .thumbnail{
+    border: none;
+}
+.gallery .thumbnail .animated {
+    float: none;
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    opacity:1;
+    margin-bottom: 30px;
+}
+.gallery .thumbnail .animated img {
+    border: 1px solid #dcdada;
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 6px #6b6a6a;
+}
+.gallery .thumbnail .col-5.animated {
+    width: 20%;
+    padding: 15px;
+}
+.gallery .thumbnail .col-7.animated {
+    width: 14.285%;
+    padding: 10px;
+}
+.gallery .thumbnail .col-8.animated {
+    width: 12.5%;
+    padding: 8px;
+}
+.gallery .thumbnail .col-9.animated {
+    width: 11.11%;
+    padding: 8px;
+}
+.gallery .thumbnail a.gall-content {
+    word-wrap: break-word;
+    font-size: 15px;
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .gallery .thumbnail .col-8.animated,
+    .gallery .thumbnail .col-7.animated,
+    .gallery .thumbnail .col-9.animated{
+        width: 20%;
+        padding: 15px;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .gallery .thumbnail .col-5.animated ,
+    .gallery .thumbnail .col-7.animated ,
+    .gallery .thumbnail .col-8.animated ,
+    .gallery .thumbnail .col-9.animated {
+        width: 33.33%;
+        padding: 15px;
+    }
+}
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .gallery .thumbnail .col-5.animated ,
+    .gallery .thumbnail .col-7.animated ,
+    .gallery .thumbnail .col-8.animated ,
+    .gallery .thumbnail .col-9.animated {
+        width: 50%;
+        padding: 15px;
+    }
+}
+@media only screen and (max-width: 479px) {
+    .gallery .thumbnail .col-5.animated,
+    .gallery .thumbnail .col-7.animated,
+    .gallery .thumbnail .col-8.animated,
+    .gallery .thumbnail .col-9.animated{
+        width: 100%;
+    }
+}
