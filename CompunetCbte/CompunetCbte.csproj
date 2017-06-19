@@ -1782,6 +1782,8 @@
     <Content Include="Views\QuestionAnswers\UploadQuestion.cshtml" />
     <Content Include="Views\TakeExam\FinishExam.cshtml" />
     <Content Include="Views\Account\UploadStudent.cshtml" />
+    <Content Include="Views\Account\CreateStudent.cshtml" />
+    <Content Include="Views\Account\EditStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -135,6 +136,87 @@ namespace CompunetCbte.Controllers
         //    // If we got this far, something failed, redisplay form
         //    return View(model);
         //}
+
+        // GET: Students/Create
+        public ActionResult CreateStudent()
+        {
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName");
+            var mygender = from Gender s in Enum.GetValues(typeof(Gender))
+                select new { ID = s, Name = s.ToString() };
+           
+            ViewBag.Gender = new SelectList(mygender, "Name", "Name");
+            return View();
+        }
+
+        // POST: Students/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateStudent(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Students.Add(student);
+                await db.SaveChangesAsync();
+                var user = new ApplicationUser { UserName = student.StudentId, Email = student.Email, PhoneNumber = student.PhoneNumber };
+                var result = await UserManager.CreateAsync(user, student.Password);
+                if (result.Succeeded)
+                {
+                    await this.UserManager.AddToRoleAsync(user.Id, "Student");
+                }
+                return RedirectToAction("Index", "Students");
+            }
+            var mygender = from Gender s in Enum.GetValues(typeof(Gender))
+                select new { ID = s, Name = s.ToString() };
+
+            ViewBag.Gender = new SelectList(mygender, "Name", "Name");
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            return View(student);
+        }
+
+        // GET: Students/Edit/5
+        public async Task<ActionResult> EditStudent(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            var mygender = from Gender s in Enum.GetValues(typeof(Gender))
+                select new { ID = s, Name = s.ToString() };
+
+            ViewBag.Gender = new SelectList(mygender, "Name", "Name");
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            return View(student);
+        }
+
+        // POST: Students/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditStudent(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(student).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Students");
+            }
+            var mygender = from Gender s in Enum.GetValues(typeof(Gender))
+                select new { ID = s, Name = s.ToString() };
+
+            ViewBag.Gender = new SelectList(mygender, "Name", "Name");
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            return View(student);
+        }
+
+
         [AllowAnonymous]
         public ActionResult UploadStudent()
         {

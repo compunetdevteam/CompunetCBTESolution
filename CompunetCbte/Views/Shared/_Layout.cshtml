@@ -327,9 +327,9 @@ else if (Request.IsAuthenticated && User.IsInRole("Admin"))
        
                 <!--start submenu -->
                 <ul>
-                    <li>@Html.ActionLink("Add Student", "Create", "Students")</li>
+                    <li>@Html.ActionLink("Add Student", "CreateStudent", "Account")</li>
                     <li>@Html.ActionLink("List Students", "Index", "Students")</li>
-                    <li>@Html.ActionLink("Excel Upload", "UploadStudent", "Students")</li>
+                    <li>@Html.ActionLink("Excel Upload", "UploadStudent", "Account")</li>
          
 
                 </ul><!--end /submenu -->

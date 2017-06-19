@@ -45,7 +45,7 @@ namespace CompunetCbte.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode");
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName");
             return View();
         }
 
@@ -54,7 +54,7 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "StudentId,DepartmentId,FirstName,MiddleName,LastName,Gender,Email,PhoneNumber,Passport")] Student student)
+        public async Task<ActionResult> Create(Student student)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace CompunetCbte.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -85,7 +85,7 @@ namespace CompunetCbte.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -94,7 +94,7 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "StudentId,DepartmentId,FirstName,MiddleName,LastName,Gender,Email,PhoneNumber,Passport")] Student student)
+        public async Task<ActionResult> Edit(Student student)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace CompunetCbte.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
