@@ -41,7 +41,7 @@ namespace CompunetCbte.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode");
+            ViewBag.DepartmentId = new MultiSelectList(db.Departments, "DepartmentId", "DeptName");
             ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName");
             return View();
         }
@@ -51,18 +51,31 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,SemesterId,DepartmentId")] Course course)
+        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,SemesterId,DepartmentId")] CourseVm model)
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
+                foreach (var item in model.DepartmentId)
+                {
+                    var course = new Course
+                    {
+                        CourseCode = model.CourseCode,
+                        CourseName = model.CourseName,
+                        CourseDescription = model.CourseDescription,
+                        Credits = model.Credits,
+                        SemesterId = model.SemesterId,
+                        DepartmentId = item
+                    };
+                    db.Courses.Add(course);
+                }
+               
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
-            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
-            return View(course);
+            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", model.DepartmentId);
+            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", model.SemesterId);
+            return View(model);
         }
 
         // GET: Courses/Edit/5
