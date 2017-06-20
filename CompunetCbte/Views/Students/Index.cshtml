@@ -41,7 +41,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Department.DeptCode)
+            @Html.DisplayFor(modelItem => item.Department.DeptName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.FirstName)
@@ -62,10 +62,12 @@
             @Html.DisplayFor(modelItem => item.PhoneNumber)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Passport)
+            <td>
+                <img src="@Url.Action("RenderImage", new { studentId = item.StudentId})" width="100" height="100" />
+            </td>
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }) |
+            @Html.ActionLink("Edit", "EditStudent", "Account", new { id=item.StudentId }) |
             @Html.ActionLink("Details", "Details", new { id=item.StudentId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.StudentId })
         </td>

@@ -296,7 +296,7 @@ namespace SwiftKampus.Controllers
                     TempData["Title"] = "Success.";
 
                 }
-                return RedirectToAction("Index", "Students");
+                return RedirectToAction("Index", "QuestionAnswers");
             }
 
             ViewBag.Error = $"File type is Incorrect <br/>";
