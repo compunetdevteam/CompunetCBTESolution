@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
+    <Compile Include="Controllers\ExamInstructionsController.cs" />
     <Compile Include="Controllers\ExamLogsController.cs" />
     <Compile Include="Controllers\ExamRulesController.cs" />
     <Compile Include="Controllers\ExamSettingsController.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\RoleName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\EmailSetUpServices.cs" />
@@ -2066,6 +2068,12 @@
     <Content Include="Views\Students\UploadStudent.cshtml" />
     <Content Include="Views\QuestionAnswers\UploadQuestion.cshtml" />
     <Content Include="Views\Shared\_LayoutIndex.cshtml" />
+    <Content Include="Views\ExamInstructions\Create.cshtml" />
+    <Content Include="Views\ExamInstructions\Delete.cshtml" />
+    <Content Include="Views\ExamInstructions\Details.cshtml" />
+    <Content Include="Views\ExamInstructions\Edit.cshtml" />
+    <Content Include="Views\ExamInstructions\Index.cshtml" />
+    <Content Include="Views\ExamInstructions\Instruction.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
