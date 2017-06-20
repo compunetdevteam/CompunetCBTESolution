@@ -43,7 +43,7 @@ namespace CompunetCbte.Migrations
 
                 manager.Create(role);
             }
-           
+
 
             if (!context.Roles.Any(r => r.Name == "SuperAdmin"))
             {

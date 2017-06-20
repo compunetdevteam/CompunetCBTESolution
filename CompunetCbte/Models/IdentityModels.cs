@@ -49,5 +49,6 @@ namespace CompunetCbte.Models
 
         public DbSet<ExamType> ExamTypes { get; set; }
         public DbSet<ExamLog> ExamLogs { get; set; }
+        public DbSet<ExamInstruction> ExamInstructions { get; set; }
     }
 }

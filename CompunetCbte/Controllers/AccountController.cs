@@ -96,6 +96,12 @@ namespace CompunetCbte.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (User.IsInRole(RoleName.Student))
+                    {
+                        return RedirectToAction("Instruction", "ExamInstructions");
+
+                 
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
