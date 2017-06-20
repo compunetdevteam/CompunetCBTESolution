@@ -1,24 +1,26 @@
-﻿
+﻿using CompunetCbte.Models;
+using CompunetCbte.Services;
+using CompunetCbte.ViewModels.CBTE;
+using ExamSolutionModel.CBTE;
+using OfficeOpenXml;
 using System;
-using SwiftKampusModel.CBTE;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using CompunetCbte.Services;
-using CompunetCbte.ViewModels.CBTE;
-using ExamSolutionModel;
-using ExamSolutionModel.CBTE;
-using OfficeOpenXml;
 
-namespace SwiftKampus.Controllers
+namespace CompunetCbte.Controllers
 {
     public class QuestionAnswersController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public QuestionAnswersController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: QuestionAnswers
         public async Task<ActionResult> Index()
@@ -49,9 +51,9 @@ namespace SwiftKampus.Controllers
             ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             //var questionType = from QuestionType s in Enum.GetValues(typeof(QuestionType))
             //    select new { ID = s, Name = s.ToString() };
-           
+
             //ViewBag.QuestionType = new SelectList(questionType, "Name", "Name");
-          
+
             return View();
         }
 
@@ -211,7 +213,7 @@ namespace SwiftKampus.Controllers
             {
                 string lastrecord = "";
                 int recordCount = 0;
-                string message = "";
+                string message = string.Empty;
                 string fileContentType = file.ContentType;
                 byte[] fileBytes = new byte[file.ContentLength];
                 var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
@@ -254,7 +256,7 @@ namespace SwiftKampus.Controllers
                             .FirstOrDefaultAsync();
                         var examType = await _db.ExamTypes.Where(x => x.ExamName.ToUpper().Equals(exam))
                                             .FirstOrDefaultAsync();
-                        if (courseCode == null  && examType == null)
+                        if (courseCode == null && examType == null)
                         {
                             TempData["UserMessage"] = "The Department code or Exam Type in the excel doesn't exist";
                             TempData["Title"] = "Error.";
@@ -278,7 +280,7 @@ namespace SwiftKampus.Controllers
 
                             };
                             _db.QuestionAnswers.Add(questionAnswer);
-                           
+
                             recordCount++;
                             lastrecord = $"The last Updated record has the Course  {courseCode.CourseName} and Question Type is {questionType}";
 

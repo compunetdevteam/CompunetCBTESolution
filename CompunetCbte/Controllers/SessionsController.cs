@@ -1,22 +1,27 @@
-﻿using System;
+﻿using CompunetCbte.Models;
+using ExamSolutionModel;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using ExamSolutionModel;
 
 namespace CompunetCbte.Controllers
 {
     public class SessionsController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public SessionsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: Sessions
         public async Task<ActionResult> Index()
         {
-            return View(await db.Sessions.AsNoTracking().OrderBy(s => s.SessionName).ToListAsync());
+            return View(await _db.Sessions.AsNoTracking().OrderBy(s => s.SessionName).ToListAsync());
             //var orderedList = cnt.OrderBy(x => x.GroupTypeId).ThenBy(x => x.ContentId);
         }
 
@@ -27,7 +32,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Sessions.FindAsync(id);
+            Session session = await _db.Sessions.FindAsync(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -52,7 +57,7 @@ namespace CompunetCbte.Controllers
             {
                 if (session.ActiveSession.Equals(true))
                 {
-                    var current = await db.Sessions.AsNoTracking().Where(s => s.ActiveSession.Equals(true))
+                    var current = await _db.Sessions.AsNoTracking().Where(s => s.ActiveSession.Equals(true))
                         .CountAsync();
                     if (current >= 1)
                     {
@@ -62,8 +67,8 @@ namespace CompunetCbte.Controllers
                 }
 
                 session.SessionName = session.SessionName.Trim();
-                db.Sessions.Add(session);
-                await db.SaveChangesAsync();
+                _db.Sessions.Add(session);
+                await _db.SaveChangesAsync();
                 TempData["UserMessage"] = "Session Created Successfully.";
                 TempData["Title"] = "Success.";
                 return RedirectToAction("Create");
@@ -81,7 +86,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Sessions.FindAsync(id);
+            Session session = await _db.Sessions.FindAsync(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -100,7 +105,7 @@ namespace CompunetCbte.Controllers
             {
                 if (session.ActiveSession.Equals(true))
                 {
-                    var current = await db.Sessions.AsNoTracking().Where(s => s.ActiveSession.Equals(true)).CountAsync();
+                    var current = await _db.Sessions.AsNoTracking().Where(s => s.ActiveSession.Equals(true)).CountAsync();
                     if (current >= 1)
                     {
                         ViewBag.Message = "You cant have more than ONE active Sessions";
@@ -110,8 +115,8 @@ namespace CompunetCbte.Controllers
                 try
                 {
                     session.SessionName = session.SessionName.Trim();
-                    db.Entry(session).State = System.Data.Entity.EntityState.Modified;
-                    await db.SaveChangesAsync();
+                    _db.Entry(session).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
                     TempData["UserMessage"] = "Session Updated Successfully.";
                     TempData["Title"] = "Success.";
                     return RedirectToAction("Index");
@@ -132,7 +137,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Session session = await db.Sessions.FindAsync(id);
+            Session session = await _db.Sessions.FindAsync(id);
             if (session == null)
             {
                 return HttpNotFound();
@@ -145,9 +150,9 @@ namespace CompunetCbte.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Session session = await db.Sessions.FindAsync(id);
-            db.Sessions.Remove(session);
-            await db.SaveChangesAsync();
+            Session session = await _db.Sessions.FindAsync(id);
+            if (session != null) _db.Sessions.Remove(session);
+            await _db.SaveChangesAsync();
             TempData["UserMessage"] = "Session Deleted Successfully.";
             TempData["Title"] = "Error.";
             return RedirectToAction("Index");
@@ -157,7 +162,7 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

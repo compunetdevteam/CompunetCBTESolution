@@ -1,17 +1,20 @@
-﻿
-using SwiftKampusModel.CBTE;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CompunetCbte.Models;
 using ExamSolutionModel.CBTE;
 
-namespace SwiftKampus.Controllers
+namespace CompunetCbte.Controllers
 {
     public class ExamTypesController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public ExamTypesController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: ExamTypes
         public async Task<ActionResult> Index()

@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CompunetCbte;
 using CompunetCbte.Controllers;
-using SwiftKampus.Controllers;
 
 namespace CompunetCbte.Tests.Controllers
 {

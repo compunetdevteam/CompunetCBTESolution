@@ -98,9 +98,7 @@ namespace CompunetCbte.Controllers
                 case SignInStatus.Success:
                     if (User.IsInRole(RoleName.Student))
                     {
-                        return RedirectToAction("Instruction", "ExamInstructions");
-
-                 
+                        //return RedirectToAction("Instruction", "ExamInstructions");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:

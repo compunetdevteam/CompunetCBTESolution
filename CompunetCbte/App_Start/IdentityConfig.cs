@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using CompunetCbte.Models;
+using CompunetCbte.Services;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using CompunetCbte.Models;
-using CompunetCbte.Services;
+using System;
+using System.Configuration;
+using System.Data.Entity;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CompunetCbte
 {
@@ -55,7 +53,6 @@ namespace CompunetCbte
                 isSuccess = true;
             }
 
-
             return Task.FromResult(true);
         }
     }
@@ -68,7 +65,7 @@ namespace CompunetCbte
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<OnlineCbte>()));
             // Configure validation logic for usernames
@@ -109,7 +106,7 @@ namespace CompunetCbte
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
@@ -138,6 +135,7 @@ namespace CompunetCbte
     public class CustomSms
     {
         private readonly OnlineCbte _db;
+
         public CustomSms()
         {
             _db = new OnlineCbte();
@@ -172,7 +170,6 @@ namespace CompunetCbte
                 isSuccess = true;
             }
 
-
             return Task.FromResult(true);
         }
 
@@ -203,7 +200,6 @@ namespace CompunetCbte
             {
                 isSuccess = true;
             }
-
 
             return Task.FromResult(true);
         }

@@ -12,11 +12,11 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Department.DeptCode)
+            @Html.DisplayNameFor(model => model.Department.DeptName)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Semester.SemesterName)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.CourseCode)
         </th>
@@ -26,9 +26,9 @@
         <th>
             @Html.DisplayNameFor(model => model.CourseDescription)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.CourseType)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Credits)
         </th>
@@ -38,11 +38,11 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Department.DeptCode)
+            @Html.DisplayFor(modelItem => item.Department.DeptName)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Semester.SemesterName)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.CourseCode)
         </td>
@@ -52,9 +52,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.CourseDescription)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.CourseType)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.Credits)
         </td>

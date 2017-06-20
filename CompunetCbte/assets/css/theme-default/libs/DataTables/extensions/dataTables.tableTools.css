@@ -544,7 +544,6 @@
 .make-ratio(xs, 2, 1);
 .make-ratio(xs, 3, 1);
 
-
 // Small grid
 //
 // Small device range, from phones to tablets.
@@ -554,7 +553,6 @@
 	.make-ratio(sm, 3, 1);
 }
 
-
 // Medium grid
 //
 // For the desktop device range.
@@ -563,7 +561,6 @@
 	.make-ratio(md, 2, 1);
 	.make-ratio(md, 3, 1);
 }
-
 
 // Large grid
 //
@@ -581,7 +578,7 @@
  * Language:    Javascript
  * License:     GPL v2 / 3 point BSD
  * Project:     DataTables
- * 
+ *
  * Copyright 2009-2012 Allan Jardine, all rights reserved.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -737,4 +734,3 @@ div.DTTT_collection a.DTTT_button {
   font-size: 14px;
   line-height: 20px;
 }
-

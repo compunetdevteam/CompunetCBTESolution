@@ -1,4 +1,4 @@
-﻿@model ExamSolutionModel.Course
+﻿@model ExamSolutionModel.CourseVm
 
 @{
     ViewBag.Title = "Create";
@@ -39,13 +39,13 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.CourseType, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.CourseType, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Credits, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -55,13 +55,13 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.SemesterId, "SemesterId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("SemesterId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SemesterId, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.DepartmentId, "DepartmentId", htmlAttributes: new { @class = "control-label col-md-2" })

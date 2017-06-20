@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace CompunetCbte
 {
@@ -40,7 +39,7 @@ namespace CompunetCbte
                 "~/assets/js/core/demo/DemoDashboard.js",
 
                 "~/Scripts/alertify/alertify.js"
-                // needed for drag/move events in fullcalendar
+            // needed for drag/move events in fullcalendar
 
             ));
 

@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using CompunetCbte.Models;
+﻿using CompunetCbte.Models;
 using ExamSolutionModel;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
     public class CoursesController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public CoursesController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: Courses
         public async Task<ActionResult> Index()
         {
-            var courses = db.Courses.Include(c => c.Department).Include(c => c.Semester);
+            var courses = _db.Courses.Include(c => c.Department);
             return View(await courses.ToListAsync());
         }
 
@@ -30,7 +30,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = await db.Courses.FindAsync(id);
+            Course course = await _db.Courses.FindAsync(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -41,8 +41,8 @@ namespace CompunetCbte.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new MultiSelectList(db.Departments, "DepartmentId", "DeptName");
-            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName");
+            ViewBag.DepartmentId = new MultiSelectList(_db.Departments, "DepartmentId", "DeptName");
+            ViewBag.SemesterId = new SelectList(_db.Semesters, "SemesterId", "SemesterName");
             return View();
         }
 
@@ -51,7 +51,7 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,SemesterId,DepartmentId")] CourseVm model)
+        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,DepartmentId")] CourseVm model)
         {
             if (ModelState.IsValid)
             {
@@ -63,18 +63,18 @@ namespace CompunetCbte.Controllers
                         CourseName = model.CourseName,
                         CourseDescription = model.CourseDescription,
                         Credits = model.Credits,
-                        SemesterId = model.SemesterId,
+                        //SemesterId = model.SemesterId,
                         DepartmentId = item
                     };
-                    db.Courses.Add(course);
+                    _db.Courses.Add(course);
                 }
-               
-                await db.SaveChangesAsync();
+
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", model.DepartmentId);
-            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", model.SemesterId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", model.DepartmentId);
+            // ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", model.SemesterId);
             return View(model);
         }
 
@@ -85,13 +85,13 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = await db.Courses.FindAsync(id);
+            Course course = await _db.Courses.FindAsync(id);
             if (course == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
-            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
+            //ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
             return View(course);
         }
 
@@ -104,12 +104,12 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(course).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
-            ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
+            // ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
             return View(course);
         }
 
@@ -120,7 +120,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = await db.Courses.FindAsync(id);
+            Course course = await _db.Courses.FindAsync(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -133,9 +133,9 @@ namespace CompunetCbte.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Course course = await db.Courses.FindAsync(id);
-            db.Courses.Remove(course);
-            await db.SaveChangesAsync();
+            Course course = await _db.Courses.FindAsync(id);
+            _db.Courses.Remove(course);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -143,7 +143,7 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

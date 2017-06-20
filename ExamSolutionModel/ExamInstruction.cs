@@ -10,5 +10,9 @@ namespace ExamSolutionModel
     {
         public int ExamInstructionId { get; set; }
         public string Instruction { get; set; }
+        public int CourseId { get; set; }
+        public virtual Course Course { get; set; }
+
+
     }
 }

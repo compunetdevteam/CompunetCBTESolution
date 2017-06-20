@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CompunetCbte.Models;
+using CompunetCbte.Services;
+using CompunetCbte.ViewModels.CBTE;
+using ExamSolutionModel.CBTE;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using CompunetCbte.Services;
-using CompunetCbte.ViewModels.CBTE;
-using ExamSolutionModel.CBTE;
-using Microsoft.AspNet.Identity;
 
 namespace CompunetCbte.Controllers
 {
     public class TakeExamController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public TakeExamController()
+        {
+            _db = new OnlineCbte();
+        }
 
 
         //// GET: TakeExam
@@ -501,7 +505,7 @@ namespace CompunetCbte.Controllers
             {
                 StudentId = studentdetails.StudentId,
                 CourseId = studentdetails.CourseId,
-               // LevelId = studentdetails.LevelId,
+                // LevelId = studentdetails.LevelId,
                 SemesterId = studentdetails.SemesterId,
                 SessionId = studentdetails.SessionId,
                 ExamTypeId = studentdetails.ExamTypeId,

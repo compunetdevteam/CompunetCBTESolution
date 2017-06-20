@@ -11,7 +11,12 @@ namespace CompunetCbte.Controllers
 {
     public class SemestersController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public SemestersController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: Semesters
         public async Task<ActionResult> Index()

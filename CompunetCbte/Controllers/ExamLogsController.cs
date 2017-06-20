@@ -1,22 +1,27 @@
-﻿using System.Data.Entity;
+﻿using CompunetCbte.Models;
+using ExamSolutionModel.CBTE;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using ExamSolutionModel.CBTE;
 
 namespace CompunetCbte.Controllers
 {
     public class ExamLogsController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public ExamLogsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: ExamLogs
         public async Task<ActionResult> Index(string studentId, string courseId, string levelId,
                         string semesterid, string sessionid)
         {
-            var examLogs = db.ExamLogs.AsNoTracking().Include(e => e.Course).Include(e => e.ExamType)
+            var examLogs = _db.ExamLogs.AsNoTracking().Include(e => e.Course).Include(e => e.ExamType)
                             .Include(e => e.Semester).Include(e => e.Sessions)
                             .Where(x => x.StudentId.Equals(studentId) && courseId.Equals(courseId) && levelId.Equals(levelId)
                             && semesterid.Equals(semesterid) && semesterid.Equals(semesterid));
@@ -30,7 +35,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamLog examLog = await db.ExamLogs.FindAsync(id);
+            ExamLog examLog = await _db.ExamLogs.FindAsync(id);
             if (examLog == null)
             {
                 return HttpNotFound();
@@ -41,11 +46,11 @@ namespace CompunetCbte.Controllers
         // GET: ExamLogs/Create
         public ActionResult Create()
         {
-            ViewBag.CourseId = new SelectList(db.Courses.AsNoTracking(), "CourseId", "CourseCode");
-            ViewBag.ExamTypeId = new SelectList(db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId");
-           
-            ViewBag.SemesterId = new SelectList(db.Semesters.AsNoTracking(), "SemesterId", "SemesterName");
-            ViewBag.SessionId = new SelectList(db.Sessions.AsNoTracking(), "SessionId", "SessionName");
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode");
+            ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId");
+
+            ViewBag.SemesterId = new SelectList(_db.Semesters.AsNoTracking(), "SemesterId", "SemesterName");
+            ViewBag.SessionId = new SelectList(_db.Sessions.AsNoTracking(), "SessionId", "SessionName");
             return View();
         }
 
@@ -58,15 +63,15 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.ExamLogs.Add(examLog);
-                await db.SaveChangesAsync();
+                _db.ExamLogs.Add(examLog);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Create");
             }
 
-            ViewBag.CourseId = new SelectList(db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
-            ViewBag.ExamTypeId = new SelectList(db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
-            ViewBag.SemesterId = new SelectList(db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
-            ViewBag.SessionId = new SelectList(db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
+            ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
+            ViewBag.SemesterId = new SelectList(_db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
+            ViewBag.SessionId = new SelectList(_db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
             return View(examLog);
         }
 
@@ -77,15 +82,15 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamLog examLog = await db.ExamLogs.FindAsync(id);
+            ExamLog examLog = await _db.ExamLogs.FindAsync(id);
             if (examLog == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseId = new SelectList(db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
-            ViewBag.ExamTypeId = new SelectList(db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
-            ViewBag.SemesterId = new SelectList(db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
-            ViewBag.SessionId = new SelectList(db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
+            ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
+            ViewBag.SemesterId = new SelectList(_db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
+            ViewBag.SessionId = new SelectList(_db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
             return View(examLog);
         }
 
@@ -98,14 +103,14 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(examLog).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(examLog).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CourseId = new SelectList(db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
-            ViewBag.ExamTypeId = new SelectList(db.ExamTypes, "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
-            ViewBag.SemesterId = new SelectList(db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
-            ViewBag.SessionId = new SelectList(db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examLog.CourseId);
+            ViewBag.ExamTypeId = new SelectList(_db.ExamTypes, "ExamTypeId", "ExamTypeId", examLog.ExamTypeId);
+            ViewBag.SemesterId = new SelectList(_db.Semesters.AsNoTracking(), "SemesterId", "SemesterName", examLog.SemesterId);
+            ViewBag.SessionId = new SelectList(_db.Sessions.AsNoTracking(), "SessionId", "SessionName", examLog.SessionId);
             return View(examLog);
         }
 
@@ -116,7 +121,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamLog examLog = await db.ExamLogs.FindAsync(id);
+            ExamLog examLog = await _db.ExamLogs.FindAsync(id);
             if (examLog == null)
             {
                 return HttpNotFound();
@@ -129,9 +134,9 @@ namespace CompunetCbte.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            ExamLog examLog = await db.ExamLogs.FindAsync(id);
-            if (examLog != null) db.ExamLogs.Remove(examLog);
-            await db.SaveChangesAsync();
+            ExamLog examLog = await _db.ExamLogs.FindAsync(id);
+            if (examLog != null) _db.ExamLogs.Remove(examLog);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -139,7 +144,7 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

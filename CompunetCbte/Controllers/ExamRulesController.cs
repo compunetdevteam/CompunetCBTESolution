@@ -1,17 +1,20 @@
-﻿
-using SwiftKampusModel.CBTE;
+﻿using CompunetCbte.Models;
+using ExamSolutionModel.CBTE;
 using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using ExamSolutionModel.CBTE;
 
-namespace SwiftKampus.Controllers
+namespace CompunetCbte.Controllers
 {
     public class ExamRulesController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public ExamRulesController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: ExamRules
         public async Task<ActionResult> Index()
@@ -71,7 +74,7 @@ namespace SwiftKampus.Controllers
             }
 
             ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", model.CourseId);
-           // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", model.LevelId);
+            // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", model.LevelId);
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View(model);
         }
@@ -89,7 +92,7 @@ namespace SwiftKampus.Controllers
                 return HttpNotFound();
             }
             ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examRule.CourseId);
-           // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", examRule.LevelId);
+            // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", examRule.LevelId);
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View(examRule);
         }

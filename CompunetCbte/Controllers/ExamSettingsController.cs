@@ -1,6 +1,4 @@
-﻿
-using SwiftKampusModel.CBTE;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,11 +6,16 @@ using System.Web.Mvc;
 using CompunetCbte.Models;
 using ExamSolutionModel.CBTE;
 
-namespace SwiftKampus.Controllers
+namespace CompunetCbte.Controllers
 {
     public class ExamSettingsController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public ExamSettingsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: ExamSettings
         public async Task<ActionResult> Index()

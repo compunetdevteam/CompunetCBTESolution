@@ -21,26 +21,27 @@ namespace ExamSolutionModel
         [Display(Name = "Course Description")]
         public string CourseDescription { get; set; }
 
-        public string CourseType { get; set; }
+        //public string CourseType { get; set; }
 
         [Range(1, 5)]
         [Required(ErrorMessage = "Your Course Credit is required")]
         public int Credits { get; set; }
 
-        [Display(Name = "Semester Name")]
-        public int? SemesterId { get; set; }
+        //[Display(Name = "Semester Name")]
+        //public int? SemesterId { get; set; }
 
         [Display(Name = "Department Name")]
         [Required]
         public int DepartmentId { get; set; }
 
-        public virtual Semester Semester { get; set; }
-       public virtual Department Department { get; set; }
+        //public virtual Semester Semester { get; set; }
+        public virtual Department Department { get; set; }
         public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
         public virtual ICollection<ExamRule> ExamRules { get; set; }
     
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }
         public virtual ICollection<ExamLog> ExamLogs { get; set; }
+        public virtual ICollection<ExamInstruction> ExamInstructions { get; set; }
 
     }
 
@@ -61,15 +62,11 @@ namespace ExamSolutionModel
         [Display(Name = "Course Description")]
         public string CourseDescription { get; set; }
 
-        public string CourseType { get; set; }
-
         [Range(1, 5)]
         [Required(ErrorMessage = "Your Course Credit is required")]
         public int Credits { get; set; }
 
-        [Display(Name = "Semester Name")]
-        public int? SemesterId { get; set; }
-
+    
         [Display(Name = "Department Name")]
         [Required]
         public int[] DepartmentId { get; set; }

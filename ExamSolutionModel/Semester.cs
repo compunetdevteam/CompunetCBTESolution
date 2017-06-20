@@ -17,9 +17,8 @@ namespace ExamSolutionModel
 
         [Display(Name = "Current Semester")]
         public bool ActiveSemester { get; set; }
-        public virtual ICollection<Course> Courses { get; set; }
+        //public virtual ICollection<Course> Courses { get; set; }
   
-        public virtual ICollection<Semester> Semesters { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }
         public virtual ICollection<ExamLog> ExamLogs { get; set; }

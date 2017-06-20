@@ -1,19 +1,22 @@
-﻿using System;
+﻿using CompunetCbte.Models;
+using CompunetCbte.ViewModels;
+using System;
 using System.Configuration;
-using System.Data.Entity;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using CompunetCbte.ViewModels;
 
-namespace SwiftKampus.Controllers
+namespace CompunetCbte.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly OnlineCbte _db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public HomeController()
+        {
+            _db = new OnlineCbte();
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -59,6 +62,6 @@ namespace SwiftKampus.Controllers
             return View("Index");
         }
 
-       
+
     }
 }

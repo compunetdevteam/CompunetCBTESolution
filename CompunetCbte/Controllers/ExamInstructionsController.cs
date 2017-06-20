@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using CompunetCbte.Models;
+﻿using CompunetCbte.Models;
 using ExamSolutionModel;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
     public class ExamInstructionsController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public ExamInstructionsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: ExamInstructions
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.ExamInstructions.ToList());
+            var examInstructions = _db.ExamInstructions.Include(e => e.Course);
+            return View(await examInstructions.ToListAsync());
         }
 
-        //this page return the Instruction for each exams
-        public ActionResult Instruction()
-        {
-            return View();
-        }
         // GET: ExamInstructions/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamInstruction examInstruction = db.ExamInstructions.Find(id);
+            ExamInstruction examInstruction = await _db.ExamInstructions.FindAsync(id);
             if (examInstruction == null)
             {
                 return HttpNotFound();
@@ -44,65 +41,69 @@ namespace CompunetCbte.Controllers
         // GET: ExamInstructions/Create
         public ActionResult Create()
         {
+            ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseCode");
             return View();
         }
 
         // POST: ExamInstructions/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ExamInstructionId,Instruction")] ExamInstruction examInstruction)
+        public async Task<ActionResult> Create([Bind(Include = "ExamInstructionId,Instruction,CourseId")] ExamInstruction examInstruction)
         {
             if (ModelState.IsValid)
             {
-                db.ExamInstructions.Add(examInstruction);
-                db.SaveChanges();
+                _db.ExamInstructions.Add(examInstruction);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseCode", examInstruction.CourseId);
             return View(examInstruction);
         }
 
         // GET: ExamInstructions/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamInstruction examInstruction = db.ExamInstructions.Find(id);
+            ExamInstruction examInstruction = await _db.ExamInstructions.FindAsync(id);
             if (examInstruction == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseCode", examInstruction.CourseId);
             return View(examInstruction);
         }
 
         // POST: ExamInstructions/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ExamInstructionId,Instruction")] ExamInstruction examInstruction)
+        public async Task<ActionResult> Edit([Bind(Include = "ExamInstructionId,Instruction,CourseId")] ExamInstruction examInstruction)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(examInstruction).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(examInstruction).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseCode", examInstruction.CourseId);
             return View(examInstruction);
         }
 
         // GET: ExamInstructions/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ExamInstruction examInstruction = db.ExamInstructions.Find(id);
+            ExamInstruction examInstruction = await _db.ExamInstructions.FindAsync(id);
             if (examInstruction == null)
             {
                 return HttpNotFound();
@@ -113,11 +114,11 @@ namespace CompunetCbte.Controllers
         // POST: ExamInstructions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            ExamInstruction examInstruction = db.ExamInstructions.Find(id);
-            db.ExamInstructions.Remove(examInstruction);
-            db.SaveChanges();
+            ExamInstruction examInstruction = await _db.ExamInstructions.FindAsync(id);
+            if (examInstruction != null) _db.ExamInstructions.Remove(examInstruction);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -125,7 +126,7 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

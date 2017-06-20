@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using CompunetCbte.Models;
+﻿using CompunetCbte.Models;
 using ExamSolutionModel;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
     public class DepartmentsController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public DepartmentsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: Departments
         public async Task<ActionResult> Index()
         {
-            return View(await db.Departments.ToListAsync());
+            return View(await _db.Departments.ToListAsync());
         }
 
         // GET: Departments/Details/5
@@ -29,7 +29,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = await _db.Departments.FindAsync(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -52,8 +52,8 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Departments.Add(department);
-                await db.SaveChangesAsync();
+                _db.Departments.Add(department);
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +67,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = await _db.Departments.FindAsync(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -84,8 +84,8 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(department).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(department).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(department);
@@ -98,7 +98,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = await _db.Departments.FindAsync(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -111,9 +111,9 @@ namespace CompunetCbte.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Department department = await db.Departments.FindAsync(id);
-            db.Departments.Remove(department);
-            await db.SaveChangesAsync();
+            Department department = await _db.Departments.FindAsync(id);
+            if (department != null) _db.Departments.Remove(department);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -121,9 +121,10 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
+            _db.Dispose();
         }
     }
 }
