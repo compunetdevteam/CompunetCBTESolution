@@ -191,6 +191,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
+    <Compile Include="Controllers\DepartmentCoursesController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\ExamInstructionsController.cs" />
     <Compile Include="Controllers\ExamLogsController.cs" />
@@ -1798,6 +1799,12 @@
     <Content Include="Views\ExamInstructions\Details.cshtml" />
     <Content Include="Views\ExamInstructions\Edit.cshtml" />
     <Content Include="Views\ExamInstructions\Index.cshtml" />
+    <Content Include="Views\Account\DeleteStudent.cshtml" />
+    <Content Include="Views\DepartmentCourses\Create.cshtml" />
+    <Content Include="Views\DepartmentCourses\Delete.cshtml" />
+    <Content Include="Views\DepartmentCourses\Details.cshtml" />
+    <Content Include="Views\DepartmentCourses\Edit.cshtml" />
+    <Content Include="Views\DepartmentCourses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

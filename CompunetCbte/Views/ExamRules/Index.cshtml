@@ -13,13 +13,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Course.CourseCode)
+            @Html.DisplayNameFor(model => model.Course.CourseName)
         </th>
         @*<th>
             @Html.DisplayNameFor(model => model.Level.LevelName)
         </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.ResultDivision)
+           Exam Type
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ScorePerQuestion)
@@ -36,7 +36,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Course.CourseCode)
+            @Html.DisplayFor(modelItem => item.Course.CourseName)
         </td>
         @*<td>
             @Html.DisplayFor(modelItem => item.Level.LevelName)

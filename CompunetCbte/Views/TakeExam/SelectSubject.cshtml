@@ -33,7 +33,7 @@
             @Html.Label("Exam Type", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ExamTypeId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.LevelId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.ExamTypeId, "", new { @class = "text-danger" })
             </div>
         </div>
         

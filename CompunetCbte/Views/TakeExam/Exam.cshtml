@@ -3,7 +3,7 @@
     ViewBag.Title = "Exam";
     ViewBag.StudentId = Model.StudentId;
     ViewBag.CourseId = Model.CourseId;
-    ViewBag.LevelId = Model.LevelId;
+    //ViewBag.LevelId = Model.LevelId;
 
 }
 @*<h1>@DateTime.Now</h1>
@@ -58,7 +58,7 @@
                     @Html.HiddenFor(model => model.FilledAnswer)
                     @Html.HiddenFor(model => model.IsFillInTheGag)
                     @Html.HiddenFor(model => model.IsMultiChoiceAnswer)
-                    @Html.HiddenFor(model => model.LevelId)
+                    @*@Html.HiddenFor(model => model.LevelId)*@
                     @Html.HiddenFor(model => model.SemesterId)
                     @Html.HiddenFor(model => model.SessionId)
                     @ViewBag.Check1 = @Html.DisplayFor(modelItem => Model.Check1)

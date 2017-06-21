@@ -1,10 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using CompunetCbte.Models;
+using ExamSolutionModel.CBTE;
+using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using ExamSolutionModel.CBTE;
 
 namespace CompunetCbte.Controllers
 {
@@ -43,7 +42,7 @@ namespace CompunetCbte.Controllers
         // GET: ExamSettings/Create
         public ActionResult Create()
         {
-            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode");
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             ViewBag.SemesterId = new SelectList(_db.Semesters.AsNoTracking(), "SemesterId", "SemesterName");
             ViewBag.SessionId = new SelectList(_db.Sessions.AsNoTracking(), "SessionId", "SessionName");
@@ -55,13 +54,13 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ExamSettingId,CourseId,LevelId,SemesterId,SessionId,ExamDate,EndDate,ExamTypeId,ExamStartTime,ExamEndTime")] ExamSetting examSetting)
+        public async Task<ActionResult> Create([Bind(Include = "ExamSettingId,CourseId,SemesterId,SessionId,ExamDate,EndDate,ExamTypeId,ExamStartTime,ExamEndTime")] ExamSetting examSetting)
         {
             if (ModelState.IsValid)
             {
-                var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
-                                        .FirstOrDefaultAsync();
-                examSetting.SubjectName = subjectName.CourseName;
+                //var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
+                //                        .FirstOrDefaultAsync();
+                ////examSetting.SubjectName = subjectName.CourseName;
                 _db.ExamSettings.Add(examSetting);
                 await _db.SaveChangesAsync();
                 TempData["UserMessage"] = "Exam Settings Added Successfully.";
@@ -101,13 +100,13 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ExamSettingId,CourseId,LevelId,SemesterId,SessionId,ExamDate,EndDate,ExamTypeId,ExamStartTime,ExamEndTime")] ExamSetting examSetting)
+        public async Task<ActionResult> Edit([Bind(Include = "ExamSettingId,CourseId,SemesterId,SessionId,ExamDate,EndDate,ExamTypeId,ExamStartTime,ExamEndTime")] ExamSetting examSetting)
         {
             if (ModelState.IsValid)
             {
-                var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
-                    .FirstOrDefaultAsync();
-                examSetting.SubjectName = subjectName.CourseName;
+                //var subjectName = await _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(examSetting.CourseId))
+                //    .FirstOrDefaultAsync();
+                //examSetting.SubjectName = subjectName.CourseName;
                 _db.Entry(examSetting).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
                 TempData["UserMessage"] = "Exam Settings Updated Successfully.";

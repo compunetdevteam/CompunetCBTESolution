@@ -12,10 +12,6 @@ namespace ExamSolutionModel.CBTE
         [Required(ErrorMessage = "Course Name is required")]
         public int CourseId { get; set; }
 
-        [Display(Name = "Level Name")]
-        [Required(ErrorMessage = "Level Name is required")]
-        public int LevelId { get; set; }
-
         public int ResultDivision { get; set; }
 
         [Display(Name = "Score per Question")]

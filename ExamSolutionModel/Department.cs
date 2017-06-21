@@ -19,6 +19,7 @@ namespace ExamSolutionModel
         public string DeptName { get; set; }
 
         public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<DepartmentCourse> DepartmentCourses { get; set; }
 
     }
 }

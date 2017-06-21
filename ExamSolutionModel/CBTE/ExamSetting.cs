@@ -12,7 +12,7 @@ namespace ExamSolutionModel.CBTE
         [Required(ErrorMessage = "Course Name is required")]
         public int CourseId { get; set; }
 
-        public string SubjectName { get; set; }
+        //public string SubjectName { get; set; }
 
         [Display(Name = "Semester")]
         [Required(ErrorMessage = "Semester is required")]

@@ -19,8 +19,7 @@ namespace CompunetCbte.Controllers
         // GET: Courses
         public async Task<ActionResult> Index()
         {
-            var courses = _db.Courses.Include(c => c.Department);
-            return View(await courses.ToListAsync());
+            return View(await _db.Courses.ToListAsync());
         }
 
         // GET: Courses/Details/5
@@ -41,8 +40,6 @@ namespace CompunetCbte.Controllers
         // GET: Courses/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new MultiSelectList(_db.Departments, "DepartmentId", "DeptName");
-            ViewBag.SemesterId = new SelectList(_db.Semesters, "SemesterId", "SemesterName");
             return View();
         }
 
@@ -51,31 +48,16 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,DepartmentId")] CourseVm model)
+        public async Task<ActionResult> Create([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,Credits")] Course course)
         {
             if (ModelState.IsValid)
             {
-                foreach (var item in model.DepartmentId)
-                {
-                    var course = new Course
-                    {
-                        CourseCode = model.CourseCode,
-                        CourseName = model.CourseName,
-                        CourseDescription = model.CourseDescription,
-                        Credits = model.Credits,
-                        //SemesterId = model.SemesterId,
-                        DepartmentId = item
-                    };
-                    _db.Courses.Add(course);
-                }
-
+                _db.Courses.Add(course);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", model.DepartmentId);
-            // ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", model.SemesterId);
-            return View(model);
+            return View(course);
         }
 
         // GET: Courses/Edit/5
@@ -90,8 +72,6 @@ namespace CompunetCbte.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
-            //ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
             return View(course);
         }
 
@@ -100,7 +80,7 @@ namespace CompunetCbte.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,CourseType,Credits,SemesterId,DepartmentId")] Course course)
+        public async Task<ActionResult> Edit([Bind(Include = "CourseId,CourseCode,CourseName,CourseDescription,Credits")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -108,8 +88,6 @@ namespace CompunetCbte.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptCode", course.DepartmentId);
-            // ViewBag.SemesterId = new SelectList(db.Semesters, "SemesterId", "SemesterName", course.SemesterId);
             return View(course);
         }
 

@@ -1,9 +1,11 @@
 ﻿using CompunetCbte.Models;
 using CompunetCbte.Services;
 using CompunetCbte.ViewModels.CBTE;
+using ExamSolutionModel;
 using ExamSolutionModel.CBTE;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -33,14 +35,21 @@ namespace CompunetCbte.Controllers
         public async Task<ActionResult> SelectSubject()
         {
             string studentName = User.Identity.GetUserName();
-            var deptId = await _db.Students.Where(x => x.StudentId.Equals(studentName)).Select(s => s.DepartmentId)
-                                    .FirstOrDefaultAsync();
+            var deptId = await _db.Students.Where(x => x.StudentId.Equals(studentName))
+                                .Select(s => s.DepartmentId).FirstOrDefaultAsync();
+
             var date = DateTime.Now;
             var currentExam = await _db.ExamSettings.AsNoTracking().Where(x => DbFunctions.TruncateTime(x.ExamDate) == DbFunctions.TruncateTime(DateTime.Today)
-                                    && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour && x.Course.DepartmentId.Equals(deptId))
+                                    && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour)
                                         .ToListAsync();
 
-            ViewBag.SubjectName = new SelectList(currentExam, "CourseId", "SubjectName");
+            var currentCourse = new List<Course>();
+            foreach (var item in currentExam)
+            {
+                currentCourse.Add(item.Course);
+            }
+
+            ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             Session["Rem_Time"] = null;
             ViewBag.Time = Session["Rem_Time"];
@@ -60,7 +69,7 @@ namespace CompunetCbte.Controllers
                 var semesterId = await _db.Semesters.AsNoTracking().Where(x => x.ActiveSemester.Equals(true)).Select(c => c.SemesterId).FirstOrDefaultAsync();
                 var sessionid = await _db.Sessions.AsNoTracking().Where(x => x.ActiveSession.Equals(true)).Select(c => c.SessionId).FirstOrDefaultAsync();
 
-                var rules = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName) && x.LevelId.Equals(model.LevelId) && x.ResultDivision.Equals(model.ExamTypeId))
+                var rules = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName) && x.ResultDivision.Equals(model.ExamTypeId))
                                  .Select(s => new { totoalquestion = s.TotalQuestion, examTime = s.MaximumTime }).FirstOrDefaultAsync();
                 if (rules == null)
                 {
@@ -107,7 +116,6 @@ namespace CompunetCbte.Controllers
                         questionNo = 1,
                         courseId = model.SubjectName,
                         studentid = studentName,
-                        level = model.LevelId,
                         examtype = model.ExamTypeId
                     });
                 }
@@ -128,7 +136,7 @@ namespace CompunetCbte.Controllers
                         {
                             StudentId = studentName,
                             CourseId = question.CourseId,
-                            LevelId = model.LevelId,
+                            //LevelId = model.LevelId,
                             SemesterId = semesterId,
                             SessionId = sessionid,
                             ExamTypeId = question.ExamTypeId,
@@ -159,7 +167,6 @@ namespace CompunetCbte.Controllers
                     questionNo = 1,
                     courseId = model.SubjectName,
                     studentid = studentName,
-                    level = model.LevelId,
                     examtype = model.ExamTypeId
                 });
             }
@@ -174,7 +181,7 @@ namespace CompunetCbte.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Exam(int questionNo, int courseId, string studentid, int level, string examtype)
+        public async Task<ActionResult> Exam(int questionNo, int courseId, string studentid, string examtype)
         {
             int myno = questionNo;
             var question = _db.StudentQuestions.FirstOrDefault(s => s.StudentId.Equals(studentid)
@@ -425,7 +432,6 @@ namespace CompunetCbte.Controllers
             if (studentdetails != null)
             {
                 await ProcessResult(model, studentdetails, scoreCount);
-
             }
 
             //return RedirectToAction("Index", "ExamLogs", new
@@ -560,12 +566,12 @@ namespace CompunetCbte.Controllers
                     .Select(c => c.SessionId)
                     .FirstOrDefaultAsync();
             double scoreCount = await _db.StudentQuestions.Where(x => x.StudentId.Equals(myStudentId) && x.SemesterId.Equals(semesterId)
-                        && x.CourseId.Equals(courseId) && x.LevelId.Equals(levelId) && x.SessionId.Equals(sessionid))
+                        && x.CourseId.Equals(courseId) && x.SessionId.Equals(sessionid))
                         .CountAsync(c => c.IsCorrect.Equals(true));
 
             var studentdetails =
                 _db.StudentQuestions.FirstOrDefault(x => x.StudentId.Equals(studentId) && x.CourseId.Equals(courseId)
-                                                         && x.LevelId.Equals(levelId) && x.SessionId.Equals(sessionid)
+                                                         && x.SessionId.Equals(sessionid)
                                                          && x.SemesterId.Equals(semesterId));
 
             if (studentdetails != null)

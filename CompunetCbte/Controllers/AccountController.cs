@@ -1,38 +1,38 @@
-﻿using System;
-using System.Data.Entity;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿using CompunetCbte.Models;
+using CompunetCbte.Services;
+using ExamSolutionModel;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using CompunetCbte.Models;
-using CompunetCbte.Services;
-using ExamSolutionModel;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
+using System;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public AccountController()
         {
+            _db = new OnlineCbte();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
+            _db = new OnlineCbte();
             SignInManager = signInManager;
         }
 
@@ -42,9 +42,9 @@ namespace CompunetCbte.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -80,7 +80,7 @@ namespace CompunetCbte.Controllers
             {
                 return View(model);
             }
-            var user = await db.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Email.Equals(model.Email) || c.PhoneNumber.Equals(model.Email) || c.UserName.Equals(model.Email));
+            var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Email.Equals(model.Email) || c.PhoneNumber.Equals(model.Email) || c.UserName.Equals(model.Email));
 
             if (user == null)
             {
@@ -144,10 +144,10 @@ namespace CompunetCbte.Controllers
         // GET: Students/Create
         public ActionResult CreateStudent()
         {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName");
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName");
             var mygender = from Gender s in Enum.GetValues(typeof(Gender))
-                select new { ID = s, Name = s.ToString() };
-           
+                           select new { ID = s, Name = s.ToString() };
+
             ViewBag.Gender = new SelectList(mygender, "Name", "Name");
             return View();
         }
@@ -161,8 +161,8 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Students.Add(student);
-                await db.SaveChangesAsync();
+                _db.Students.Add(student);
+                await _db.SaveChangesAsync();
                 var user = new ApplicationUser { UserName = student.StudentId, Email = student.Email, PhoneNumber = student.PhoneNumber };
                 var result = await UserManager.CreateAsync(user, student.Password);
                 if (result.Succeeded)
@@ -172,10 +172,10 @@ namespace CompunetCbte.Controllers
                 return RedirectToAction("Index", "Students");
             }
             var mygender = from Gender s in Enum.GetValues(typeof(Gender))
-                select new { ID = s, Name = s.ToString() };
+                           select new { ID = s, Name = s.ToString() };
 
             ViewBag.Gender = new SelectList(mygender, "Name", "Name");
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -186,16 +186,16 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await _db.Students.FindAsync(id);
             if (student == null)
             {
                 return HttpNotFound();
             }
             var mygender = from Gender s in Enum.GetValues(typeof(Gender))
-                select new { ID = s, Name = s.ToString() };
+                           select new { ID = s, Name = s.ToString() };
 
             ViewBag.Gender = new SelectList(mygender, "Name", "Name");
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -208,15 +208,15 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(student).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(student).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index", "Students");
             }
             var mygender = from Gender s in Enum.GetValues(typeof(Gender))
-                select new { ID = s, Name = s.ToString() };
+                           select new { ID = s, Name = s.ToString() };
 
             ViewBag.Gender = new SelectList(mygender, "Name", "Name");
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -257,7 +257,7 @@ namespace CompunetCbte.Controllers
                     var workSheet = currentSheet.First();
                     var noOfCol = workSheet.Dimension.End.Column;
                     var noOfRow = workSheet.Dimension.End.Row;
-                    int requiredField = 10;
+                    int requiredField = 9;
 
                     //string validCheck = myExcel.ValidateExcel(noOfRow, workSheet, requiredField);
                     //if (!validCheck.Equals("Success"))
@@ -283,7 +283,7 @@ namespace CompunetCbte.Controllers
                         var pic = workSheet.Drawings[studentId] as ExcelPicture;
 
                         string code = workSheet.Cells[row, 9].Value.ToString().Trim();
-                        var deptCode = await db.Departments.AsNoTracking()
+                        var deptCode = await _db.Departments.AsNoTracking()
                             .Where(x => x.DeptCode.ToUpper().Equals(code.ToUpper()))
                             .FirstOrDefaultAsync();
                         if (deptCode == null)
@@ -305,11 +305,12 @@ namespace CompunetCbte.Controllers
                                 PhoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim(),
                                 Gender = workSheet.Cells[row, 7].Value.ToString().Trim(),
                                 Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
+                                ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
                                 DepartmentId = deptCode.DepartmentId,
                                 Passport = ImageToByteArray(pic.Image),
                             };
 
-                            db.Students.Add(student);
+                            _db.Students.Add(student);
                             recordCount++;
                             lastrecord = $"The last Updated record has the Last Name {student.LastName} and First Name {student.FirstName} with Student Id {student.StudentId}";
 
@@ -321,7 +322,7 @@ namespace CompunetCbte.Controllers
                             return View("ErrorException");
                         }
                     }
-                    await db.SaveChangesAsync();
+                    await _db.SaveChangesAsync();
 
                     for (int row = 2; row <= noOfRow; row++)
                     {
@@ -331,7 +332,7 @@ namespace CompunetCbte.Controllers
                             var email = workSheet.Cells[row, 5].Value.ToString().Trim();
                             var phoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim();
                             var password = workSheet.Cells[row, 8].Value.ToString().Trim();
-                            var user = new ApplicationUser { UserName = studentId, Email = email, PhoneNumber = phoneNumber};
+                            var user = new ApplicationUser { UserName = studentId, Email = email, PhoneNumber = phoneNumber };
                             var result = await UserManager.CreateAsync(user, password);
                             if (result.Succeeded)
                             {
@@ -347,7 +348,7 @@ namespace CompunetCbte.Controllers
                         }
                     }
 
-                    
+
                     message = $"You have successfully Uploaded {recordCount} records...  and {lastrecord}";
                     TempData["UserMessage"] = message;
                     TempData["Title"] = "Success.";
@@ -398,7 +399,7 @@ namespace CompunetCbte.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -433,8 +434,8 @@ namespace CompunetCbte.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -681,6 +682,36 @@ namespace CompunetCbte.Controllers
             return View();
         }
 
+        // GET: Students/Delete/5
+        public async Task<ActionResult> DeleteStudent(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Student student = await _db.Students.FindAsync(id);
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+            return View(student);
+        }
+
+        // POST: Students/Delete/5
+        [HttpPost, ActionName("DeleteStudent")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(string id)
+        {
+            Student student = await _db.Students.FindAsync(id);
+            if (student != null) _db.Students.Remove(student);
+            //await _db.SaveChangesAsync();
+            var user = await _db.Users.FirstOrDefaultAsync(c => c.UserName.Equals(id));
+            _db.Users.Remove(user);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Students");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -696,6 +727,7 @@ namespace CompunetCbte.Controllers
                     _signInManager.Dispose();
                     _signInManager = null;
                 }
+
             }
 
             base.Dispose(disposing);

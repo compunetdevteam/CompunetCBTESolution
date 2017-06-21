@@ -58,6 +58,7 @@
     <Compile Include="CBTE\StudentQuestion.cs" />
     <Compile Include="Course.cs" />
     <Compile Include="Department.cs" />
+    <Compile Include="DepartmentCourse.cs" />
     <Compile Include="ExamInstruction.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PopUp.cs" />

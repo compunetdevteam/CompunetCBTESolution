@@ -1,7 +1,6 @@
 ﻿using CompunetCbte.Models;
 using ExamSolutionModel.CBTE;
 using System.Data.Entity;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -18,13 +17,19 @@ namespace CompunetCbte.Controllers
         }
 
         // GET: ExamLogs
-        public async Task<ActionResult> Index(string studentId, string courseId, string levelId,
-                        string semesterid, string sessionid)
+        //public async Task<ActionResult> Index(string studentId, string courseId, string levelId,
+        //                string semesterid, string sessionid)
+        //{
+        //    var examLogs = _db.ExamLogs.AsNoTracking().Include(e => e.Course).Include(e => e.ExamType)
+        //                    .Include(e => e.Semester).Include(e => e.Sessions)
+        //                    .Where(x => x.StudentId.Equals(studentId) && courseId.Equals(courseId) && levelId.Equals(levelId)
+        //                    && semesterid.Equals(semesterid) && semesterid.Equals(semesterid));
+        //    return View(await examLogs.ToListAsync());
+        //}
+        public async Task<ActionResult> Index()
         {
             var examLogs = _db.ExamLogs.AsNoTracking().Include(e => e.Course).Include(e => e.ExamType)
-                            .Include(e => e.Semester).Include(e => e.Sessions)
-                            .Where(x => x.StudentId.Equals(studentId) && courseId.Equals(courseId) && levelId.Equals(levelId)
-                            && semesterid.Equals(semesterid) && semesterid.Equals(semesterid));
+                .Include(e => e.Semester).Include(e => e.Sessions);
             return View(await examLogs.ToListAsync());
         }
 

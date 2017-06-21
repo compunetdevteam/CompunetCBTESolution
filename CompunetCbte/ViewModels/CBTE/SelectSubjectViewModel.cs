@@ -8,10 +8,6 @@ namespace CompunetCbte.ViewModels.CBTE
         [Required(ErrorMessage = "Subject Name is required")]
         public int SubjectName { get; set; }
 
-        [Display(Name = "LevelId Name")]
-        [Required(ErrorMessage = "LevelId Name is required")]
-        public int LevelId { get; set; }
-
         public int ExamTypeId { get; set; }
     }
 }

@@ -347,6 +347,8 @@ else if (Request.IsAuthenticated && User.IsInRole("Admin"))
                 <ul>
                     <li>@Html.ActionLink("Add New Course", "Create", "Courses")</li>
                     <li>@Html.ActionLink("View Course", "Index", "Courses")</li>
+                    <li>@Html.ActionLink("Assign Course", "Create", "DepartmentCourses")</li>
+                    <li>@Html.ActionLink("View  Assigned Course", "Index", "DepartmentCourses")</li>
           
                 </ul><!--end /submenu -->
             </li><!--end /menu-li -->
@@ -371,7 +373,7 @@ else if (Request.IsAuthenticated && User.IsInRole("Admin"))
                         <ul>
                             <li>@Html.ActionLink("Add Questions", "Create", "QuestionAnswers")</li>
                             <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
-                            <li>@Html.ActionLink("View Questions", "Index", "QuestionAnswers")</li>
+                            <li>@Html.ActionLink("Upload Question", "UploadQuestion", "QuestionAnswers")</li>
                         </ul><!--end /submenu -->
                     </li><!--end /menu-li -->
                     <li class="gui-folder">

@@ -41,7 +41,7 @@ namespace CompunetCbte.Controllers
         // GET: ExamRules/Create
         public ActionResult Create()
         {
-            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode");
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName");
             //ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName");
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View();
@@ -52,7 +52,7 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ExamRuleId,CourseId,LevelId,ResultDivision,ScorePerQuestion,TotalQuestion,MaximumTime")] ExamRule model)
+        public async Task<ActionResult> Create([Bind(Include = "ExamRuleId,CourseId,ResultDivision,ScorePerQuestion,TotalQuestion,MaximumTime")] ExamRule model)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace CompunetCbte.Controllers
                     ScorePerQuestion = model.ScorePerQuestion,
                     TotalQuestion = model.TotalQuestion,
                     MaximumTime = model.MaximumTime,
-                    LevelId = model.LevelId
+                    //LevelId = model.LevelId
                 };
                 _db.ExamRules.Add(examRule);
                 await _db.SaveChangesAsync();
@@ -73,7 +73,7 @@ namespace CompunetCbte.Controllers
                 return RedirectToAction("Create");
             }
 
-            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", model.CourseId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName", model.CourseId);
             // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", model.LevelId);
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View(model);
@@ -91,7 +91,7 @@ namespace CompunetCbte.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examRule.CourseId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName", examRule.CourseId);
             // ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", examRule.LevelId);
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View(examRule);
@@ -102,7 +102,7 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ExamRuleId,CourseId,LevelId,ResultDivision,ScorePerQuestion,TotalQuestion,MaximumTime")] ExamRule examRule)
+        public async Task<ActionResult> Edit([Bind(Include = "ExamRuleId,CourseId,ResultDivision,ScorePerQuestion,TotalQuestion,MaximumTime")] ExamRule examRule)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +112,7 @@ namespace CompunetCbte.Controllers
                 TempData["Title"] = "Success.";
                 return RedirectToAction("Index");
             }
-            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseCode", examRule.CourseId);
+            ViewBag.CourseId = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName", examRule.CourseId);
             //ViewBag.LevelId = new SelectList(_db.Levels.AsNoTracking(), "LevelId", "LevelName", examRule.LevelId);
             ViewBag.ResultDivision = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             return View(examRule);

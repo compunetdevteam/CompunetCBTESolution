@@ -3,8 +3,7 @@
     ViewBag.Title = "UploadQuestion";
 }
 
-
-<a class="btn btn-primary" href="~/Excel Template/KStudentUpload.xlsx"> Download Excel Template</a>
+<a class="btn btn-primary" href="~/ExcelTemplate/CbteQuestionUpload.xlsx">Download Excel Template</a>
 <h2>Upload Question Record</h2>
 
 @using (Html.BeginForm("UploadQuestion", "QuestionAnswers", FormMethod.Post, new { enctype = "multipart/form-data", id = "theform" }))
