@@ -104,7 +104,7 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.1.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -1406,6 +1406,7 @@
     <Content Include="assets\less\libs\fullcalendar\license.txt" />
     <Content Include="assets\less\libs\multi-select\LICENSE.txt" />
     <Content Include="assets\less\libs\wizard\MIT-LICENSE.txt" />
+    <Content Include="Content\Animate.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -1674,7 +1675,7 @@
     <Content Include="assets\less\shared\variables.less" />
     <Content Include="ExcelTemplate\CbteQuestionUpload.xlsx" />
     <Content Include="ExcelTemplate\CbteStudentTemplate.xlsx" />
-    <None Include="Properties\PublishProfiles\CompunetExamPortal - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CompunetExamSolutionDemo - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1805,6 +1806,7 @@
     <Content Include="Views\DepartmentCourses\Details.cshtml" />
     <Content Include="Views\DepartmentCourses\Edit.cshtml" />
     <Content Include="Views\DepartmentCourses\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

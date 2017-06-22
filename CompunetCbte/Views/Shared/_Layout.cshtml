@@ -147,7 +147,7 @@
 @if (Request.IsAuthenticated && User.IsInRole("Student"))
 {
     <!-- BEGIN MENUBAR-->
-    <div id="menubar" class="menubar-inverse ">
+    @*<div id="menubar" class="menubar-inverse ">
     <div class="menubar-fixed-panel">
         <div>
             <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
@@ -243,7 +243,7 @@
         </small>
     </div>
     </div><!--end .menubar-scroll-panel-->
-    </div><!--end #menubar-->
+    </div>*@<!--end #menubar-->
     <!-- END MENUBAR -->
 }
 else if (Request.IsAuthenticated && User.IsInRole("Admin"))
@@ -457,10 +457,6 @@ else
 
 
 
-<script src="~/LCSK/assets/js/jquery-2.1.1.min.js"></script>
-<script src="/lcsk/assets/js/jquery.signalR-2.1.1.min.js"></script>
-<script src="/signalr/hubs" type="text/javascript"></script>
-<script src="/lcsk/chat.js" type="text/javascript"></script>
 
 
 @*<script type="text/javascript">

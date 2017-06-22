@@ -14,6 +14,7 @@
       
         <hr />
         <h2>@ViewBag.ErrorMessage</h2>
+        <h2>@ViewBag.ServerDate</h2>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.Label("SubjectName", htmlAttributes: new { @class = "control-label col-md-2" })

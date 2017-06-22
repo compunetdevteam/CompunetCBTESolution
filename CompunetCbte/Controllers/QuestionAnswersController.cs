@@ -248,7 +248,7 @@ namespace CompunetCbte.Controllers
                     }
                     for (int row = 2; row <= noOfRow; row++)
                     {
-                        string questionType = workSheet.Cells[row, 9].Value.ToString().Trim();
+                        string questionType = workSheet.Cells[row, 9].Value.ToString().ToUpper().Trim();
                         string code = workSheet.Cells[row, 1].Value.ToString().Trim();
                         string exam = workSheet.Cells[row, 2].Value.ToString().Trim().ToUpper();
                         var courseCode = await _db.Courses.AsNoTracking()

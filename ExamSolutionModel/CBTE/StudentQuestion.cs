@@ -33,5 +33,7 @@
 
         public int ExamTime { get; set; }
 
+        public virtual ExamType ExamType { get; set; }
+
     }
 }

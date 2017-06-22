@@ -3,6 +3,7 @@ using CompunetCbte.Services;
 using CompunetCbte.ViewModels.CBTE;
 using ExamSolutionModel;
 using ExamSolutionModel.CBTE;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace CompunetCbte.Controllers
             {
                 currentCourse.Add(item.Course);
             }
-
+            ViewBag.ServerDate = date;
             ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
             Session["Rem_Time"] = null;
@@ -123,9 +124,11 @@ namespace CompunetCbte.Controllers
                 //var r = new Random();
                 if (rules != null)
                 {
-                    var myquestion = await _db.QuestionAnswers.Where(x => x.CourseId.Equals(model.SubjectName)
-                                                    && x.ExamTypeId.Equals(model.ExamTypeId))
-                                                    .Take(rules.totoalquestion).ToListAsync();
+                    Random rnd = new Random();
+                    var myquestion = _db.QuestionAnswers.Where(x => x.CourseId.Equals(model.SubjectName)
+                                                   && x.ExamTypeId.Equals(model.ExamTypeId))
+                                                    .OrderBy(x => Guid.NewGuid()).Take(rules.totoalquestion)
+                                                    .DistinctBy(d => d.QuestionAnswerId);
                     // var myquestion = bquestion.OrderBy(x => Guid.NewGuid()).Take(totalQuestion).ToList();
                     //var tenRandomUser = listUsr.OrderBy(u => r.Next()).Take(10);
 
@@ -184,8 +187,9 @@ namespace CompunetCbte.Controllers
         public async Task<ActionResult> Exam(int questionNo, int courseId, string studentid, string examtype)
         {
             int myno = questionNo;
-            var question = _db.StudentQuestions.FirstOrDefault(s => s.StudentId.Equals(studentid)
-                                                                   && s.QuestionNumber.Equals(myno));
+            var question = _db.StudentQuestions.AsNoTracking().Include(i => i.ExamType)
+                                        .FirstOrDefault(s => s.StudentId.Equals(studentid)
+                                        && s.QuestionNumber.Equals(myno));
             if (question != null)
             {
                 if (Session["Rem_Time"] == null)

@@ -12,6 +12,7 @@ namespace ExamSolutionModel.CBTE
 
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }
         public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public virtual ICollection<StudentQuestion> StudentQuestions { get; set; }
         public virtual ICollection<ExamLog> ExamLogs { get; set; }
     }
 }
