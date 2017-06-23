@@ -1,9 +1,9 @@
-﻿using System.Data.Entity;
+﻿using CompunetCbte.Models;
+using ExamSolutionModel.CBTE;
+using System.Data.Entity;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using CompunetCbte.Models;
-using ExamSolutionModel.CBTE;
 
 namespace CompunetCbte.Controllers
 {
@@ -48,7 +48,7 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ExamTypeId,ExamName")] ExamType examType)
+        public async Task<ActionResult> Create([Bind(Include = "ExamTypeId,ExamName,ActiveExam")] ExamType examType)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace CompunetCbte.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ExamTypeId,ExamName")] ExamType examType)
+        public async Task<ActionResult> Edit([Bind(Include = "ExamTypeId,ExamName,ActiveExam")] ExamType examType)
         {
             if (ModelState.IsValid)
             {

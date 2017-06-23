@@ -96,11 +96,7 @@ namespace CompunetCbte.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    if (User.IsInRole(RoleName.Student))
-                    {
-                        //return RedirectToAction("Instruction", "ExamInstructions");
-                    }
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("CustomDashborad", new { username = user.UserName });
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -110,6 +106,32 @@ namespace CompunetCbte.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+        }
+
+        public ActionResult CustomDashborad(string username)
+        {
+            if (User.IsInRole(RoleName.Admin))
+            {
+                TempData["UserMessage"] = $"Login Successful, Welcome {username}";
+                TempData["Title"] = "Success.";
+                return RedirectToAction("DashBoard", "Home");
+                // return RedirectToAction("AdminDashboard", "Home");
+            }
+
+            if (User.IsInRole(RoleName.Student))
+            {
+                TempData["UserMessage"] = $"Login Successful, Welcome {username}";
+                TempData["Title"] = "Success.";
+                return RedirectToAction("SelectSubject", "TakeExam");
+            }
+
+            if (User.IsInRole(RoleName.SuperAdmin))
+            {
+                TempData["UserMessage"] = $"Login Successful, Welcome {username}";
+                TempData["Title"] = "Success.";
+                return RedirectToAction("SuperAdminDashBoard", "Students");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         //// GET: /Account/Register

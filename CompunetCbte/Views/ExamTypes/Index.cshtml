@@ -15,6 +15,9 @@
         <th>
             @Html.DisplayNameFor(model => model.ExamName)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActiveExam)
+        </th>
         <th></th>
     </tr>
 
@@ -22,6 +25,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.ExamName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActiveExam)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ExamTypeId }) |

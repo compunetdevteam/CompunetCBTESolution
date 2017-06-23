@@ -9,6 +9,7 @@ namespace ExamSolutionModel.CBTE
 
         [Display(Name = "Exam Name")]
         public string ExamName { get; set; }
+        public bool ActiveExam { get; set; }
 
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }
         public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }

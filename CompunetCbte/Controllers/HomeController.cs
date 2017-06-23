@@ -21,6 +21,11 @@ namespace CompunetCbte.Controllers
         {
             return View();
         }
+
+        public ActionResult DashBoard()
+        {
+            return View();
+        }
         public ActionResult SchoolSetUp()
         {
             return View();

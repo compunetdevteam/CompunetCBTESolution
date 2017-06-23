@@ -35,23 +35,40 @@ namespace CompunetCbte.Controllers
 
         public async Task<ActionResult> SelectSubject()
         {
+            ExamRule examRule = new ExamRule();
             string studentName = User.Identity.GetUserName();
             var deptId = await _db.Students.Where(x => x.StudentId.Equals(studentName))
                                 .Select(s => s.DepartmentId).FirstOrDefaultAsync();
+            var examtype = _db.ExamTypes.AsNoTracking().Where(x => x.ActiveExam.Equals(true));
 
             var date = DateTime.Now;
             var currentExam = await _db.ExamSettings.AsNoTracking().Where(x => DbFunctions.TruncateTime(x.ExamDate) == DbFunctions.TruncateTime(DateTime.Today)
-                                    && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour)
-                                        .ToListAsync();
+                                                && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour
+                                                && x.Course.DepartmentCourses.Where(v => v.DepartmentId.Equals(deptId))
+                                                    .Select(s => s.DepartmentId).FirstOrDefault().Equals(deptId)).ToListAsync();
 
             var currentCourse = new List<Course>();
+
             foreach (var item in currentExam)
             {
                 currentCourse.Add(item.Course);
+
             }
+            if (currentCourse.Count == 1)
+            {
+                var examTypeId = examtype.Select(s => s.ExamTypeId).FirstOrDefault();
+                var courseId = currentCourse.Select(s => s.CourseId).FirstOrDefault();
+                var rules = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(courseId)
+                                        && x.ResultDivision.Equals(examTypeId)).FirstOrDefaultAsync();
+                examRule = rules;
+            }
+
+            ViewBag.ExamTime = examRule.MaximumTime;
+            ViewBag.TotalQuestion = examRule.TotalQuestion;
+            ViewBag.ScorePerQuestion = examRule.ScorePerQuestion;
             ViewBag.ServerDate = date;
             ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
-            ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
+            ViewBag.ExamTypeId = new SelectList(examtype, "ExamTypeId", "ExamName");
             Session["Rem_Time"] = null;
             ViewBag.Time = Session["Rem_Time"];
             return View();
