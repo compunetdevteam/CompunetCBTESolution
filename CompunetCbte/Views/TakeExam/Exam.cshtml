@@ -43,7 +43,7 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="" method="post">
+        <form action="" method="post" id="myform">
             @Html.HiddenFor(model => model.ExamTypeId)
             @Html.HiddenFor(model => model.QuestionNumber)
             @Html.HiddenFor(model => model.CourseId)
@@ -86,24 +86,24 @@
                     <div class="col-md-6">
                         <div class="radio radio-styled">
                             <label>
-                                @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option1, new { @class = "radio-styled" }) @Model.Option1
+                                A. &nbsp; @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option1, new { @class = "radio-styled", id = "ra" }) @Model.Option1
                             </label>
                             <br />
                             <br />
                             <label>
-                                @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option2) @Model.Option2
-                            </label>
-
-                            <br />
-                            <br />
-                            <label>
-                                @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option3) @Model.Option3
+                                B. &nbsp; @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option2, new { @class = "radio-styled", id = "rb" }) @Model.Option2
                             </label>
 
                             <br />
                             <br />
                             <label>
-                                @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option4) @Model.Option4
+                                C. &nbsp; @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option3, new { @class = "radio-styled", id = "rc" }) @Model.Option3
+                            </label>
+
+                            <br />
+                            <br />
+                            <label>
+                                D. &nbsp; @Html.RadioButtonFor(model => model.SelectedAnswer, Model.Option4, new { @class = "radio-styled", id = "rd" }) @Model.Option4
                             </label>
 
                         </div>
@@ -149,22 +149,22 @@
                                 @*<div class="checkbox checkbox-styled">*@
                                 <label>
                                     @*<input type="checkbox" name="Check1" value="@Model.Option1"> <span>@Html.DisplayFor(modelItem => Model.Option1)</span>*@
-                                    @Html.CheckBoxFor(m => m.Check1) <span>@Html.DisplayFor(modelItem => Model.Option1)</span>
+                                    A. &nbsp; @Html.CheckBoxFor(m => m.Check1, new{ @id = "ca" }) <span>@Html.DisplayFor(modelItem => Model.Option1)</span>
                                 </label>
                                 <br /><br />
                                 <label>
                                     @*<input type="checkbox" name="Check2" value="@Model.Option2"> <span>@Html.DisplayFor(modelItem => Model.Option2)</span>*@
-                                    @Html.CheckBoxFor(m => m.Check2) <span>@Html.DisplayFor(modelItem => Model.Option2)</span>
+                                    B. &nbsp; @Html.CheckBoxFor(m => m.Check2, new { @id = "cb" }) <span>@Html.DisplayFor(modelItem => Model.Option2)</span>
                                 </label>
                                 <br /><br />
                                 <label>
                                     @*<input type="checkbox" name="Check3" value="@Model.Option3"> <span>@Html.DisplayFor(modelItem => Model.Option3)</span>*@
-                                    @Html.CheckBoxFor(m => m.Check3) <span>@Html.DisplayFor(modelItem => Model.Option3)</span>
+                                    C. &nbsp;@Html.CheckBoxFor(m => m.Check3, new { @id = "cc" }) <span>@Html.DisplayFor(modelItem => Model.Option3)</span>
                                 </label>
                                 <br /><br />
                                 <label>
                                     @*<input type="checkbox" name="Check4" value="@Model.Option4"> <span>@Html.DisplayFor(modelItem => Model.Option4)</span>*@
-                                    @Html.CheckBoxFor(m => m.Check4) <span>@Html.DisplayFor(modelItem => Model.Option4)</span>
+                                    D. &nbsp;@Html.CheckBoxFor(m => m.Check4, new { @id = "cd" }) <span>@Html.DisplayFor(modelItem => Model.Option4)</span>
                                 </label>
                             </h3>
                         </div>
@@ -181,7 +181,7 @@
                             <p>
                                 @if (Model.QuestionNumber != 1)
                                 {
-                                    <input type="submit" value="Previous" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Previous" />
+                                    <input type="submit" id="previous" value="Previous" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Previous" />
                                 }
                             </p>
                             @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-default">Default</button>
@@ -191,7 +191,7 @@
                             <p>
                                 @if (Model.QuestionNumber != Model.TotalQuestion)
                                 {
-                                    <span><input type="submit" value="Next" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Next" /></span>
+                                    <span><input type="submit" id="next" value="Next" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Next" /></span>
                                 }
                             </p>
                             @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-primary">Primary</button>
@@ -238,6 +238,30 @@
 
                 </div>*@
         </form>
+    <!-- Button trigger modal -->
+    <button type="button" id="modaldisplay" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" hidden="">
+        
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Exam Status</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Your time is Up, Your exam will be submitted Successfully</p>
+                    <p>Thanks for taking the exam... Good Luck..</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
 
     </div>
 </div>
@@ -245,42 +269,93 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-                //window.alert(5 + 6);
-                var dt = '@ViewBag.Rem_Time';
-                var dateAr = dt.split('-');
-                var newDate = dateAr[0] + '/' + dateAr[1] + '/' + dateAr[2];
+       // window.alert("Exam Fininshed because Your Time is Up, Click OK to Save your scores");
+        //window.alert(5 + 6);
+        var dt = '@ViewBag.Rem_Time';
+        var dateAr = dt.split('-');
+        var newDate = dateAr[0] + '/' + dateAr[1] + '/' + dateAr[2];
 
-                var end = new Date(dateAr[0] + '/' + dateAr[1] + '/' + dateAr[2]);
+        var end = new Date(dateAr[0] + '/' + dateAr[1] + '/' + dateAr[2]);
 
-                var _second = 1000;
-                var _minute = _second * 60;
-                var _hour = _minute * 60;
-                var _day = _hour * 24;
-                var timer;
+        var _second = 1000;
+        var _minute = _second * 60;
+        var _hour = _minute * 60;
+        var _day = _hour * 24;
+        var timer;
+       
+        function showRemaining() {
+            var now = new Date();
+            // var newend = new Date('end');
 
-                function showRemaining() {
-                    var now = new Date();
-                   // var newend = new Date('end');
+            //console.log(now + 'now');
+            //window.alert(end + 'end');
+            var distance = end - now;
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById('timecountdown').innerHTML = 'Exam Ends!';
+               // $('#modaldisplay').trigger('click');
+                window.alert("Exam Fininshed because Your Time is Up, Click OK to Save your scores");
+                window.location.href =
+                    '/TakeExam/SubmitExam?studentId=+@ViewBag.StudentId&courseId=@ViewBag.CourseId&levelId=@ViewBag.LevelId&examType=@Model.ExamTypeId';
 
-                    //console.log(now + 'now');
-                    //window.alert(end + 'end');
-                    var distance = end - now;
-                    if (distance < 0) {
-                        clearInterval(timer);
-                        document.getElementById('timecountdown').innerHTML = 'Count Down Ends!';
-                        window.location.href = '/TakeExam/SubmitExam?studentId=+@ViewBag.StudentId&courseId=@ViewBag.CourseId&levelId=@ViewBag.LevelId&examType=@Model.ExamTypeId';
+                return;
+            }
+            var days = Math.floor(distance / _day);
+            var _hours = Math.floor((distance % _day) / _hour);
+            var _minutes = Math.floor((distance % _hour) / _minute);
+            var _seconds = Math.floor((distance % _minute) / _second);
 
-                        return;
-                    }
-                    var days = Math.floor(distance / _day);
-                    var _hours = Math.floor((distance % _day) / _hour);
-                    var _minutes = Math.floor((distance % _hour) / _minute);
-                    var _seconds = Math.floor((distance % _minute) / _second);
+            document.getElementById('timecountdown').innerHTML = ' Hrs: ' + _hours;
+            document.getElementById('timecountdown').innerHTML += ' Mins: ' + _minutes;
+            document.getElementById('timecountdown').innerHTML += ' Secs: ' + _seconds;
+        }
 
-                    document.getElementById('timecountdown').innerHTML = ' Hrs: ' + _hours;
-                    document.getElementById('timecountdown').innerHTML += ' Mins: ' + _minutes;
-                    document.getElementById('timecountdown').innerHTML += ' Secs: ' + _seconds;
+        timer = setInterval(showRemaining, 1000);
+
+
+        $(document).keydown(function(e) {
+            var multiSelect = "@Model.IsMultiChoiceAnswer";
+
+            //window.alert(multiSelect);
+            if (multiSelect === "False") {
+                if (e.keyCode == 65) {
+                    $("#ra").prop("checked", "checked");
+                } else if (e.keyCode == 66) {
+                    $("#rb").prop("checked", "checked");
+                } else if (e.keyCode == 67) {
+                    $("#rc").prop("checked", "checked");
+                } else if (e.keyCode == 68) {
+                    $("#rd").prop("checked", "checked");
                 }
-                timer = setInterval(showRemaining, 1000);
+            } else {
+                if (e.keyCode == 65 && e.shiftKey) {
+                    document.getElementById("ca").checked = false;
+                } else if (e.keyCode == 66 && e.shiftKey) {
+                    document.getElementById("cb").checked = false;
+                } else if (e.keyCode == 67 && e.shiftKey) {
+                    document.getElementById("cc").checked = false;
+                } else if (e.keyCode == 68 && e.shiftKey) {
+                    document.getElementById("cd").checked = false;
+
+                } else if (e.keyCode == 65) {
+                    document.getElementById("ca").checked = true;
+                } else if (e.keyCode == 66) {
+                    document.getElementById("cb").checked = true;
+                } else if (e.keyCode == 67) {
+                    document.getElementById("cc").checked = true;
+                } else if (e.keyCode == 68) {
+                    document.getElementById("cd").checked = true;
+                }
+            }
+
+            if (e.keyCode == 37) {
+                $('#previous').trigger('click');
+            }
+            else if (e.keyCode == 39){
+                $('#next').trigger('click');
+            }
+
+        });
+        //window.onbeforeunload = function () { return "You work will be lost."; };
     </script>
 }

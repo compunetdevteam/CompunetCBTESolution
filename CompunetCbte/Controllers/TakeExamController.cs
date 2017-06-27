@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
+    [Authorize]
     public class TakeExamController : Controller
     {
         private readonly OnlineCbte _db;
@@ -66,6 +67,8 @@ namespace CompunetCbte.Controllers
             ViewBag.ExamTime = examRule.MaximumTime;
             ViewBag.TotalQuestion = examRule.TotalQuestion;
             ViewBag.ScorePerQuestion = examRule.ScorePerQuestion;
+            ViewBag.StartTime = currentExam.Select(s => s.ExamStartTime).FirstOrDefault();
+            ViewBag.EndTime = currentExam.Select(s => s.ExamEndTime).FirstOrDefault();
             ViewBag.ServerDate = date;
             ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(examtype, "ExamTypeId", "ExamName");
@@ -211,7 +214,7 @@ namespace CompunetCbte.Controllers
             {
                 if (Session["Rem_Time"] == null)
                 {
-                    int time = question.ExamTime + 60;
+                    int time = question.ExamTime;
                     Session["Rem_Time"] = DateTime.Now.AddMinutes(time).ToString("MM-dd-yyyy h:mm:ss tt");
                 }
                 //Session["Rem_Time"] = DateTime.Now.AddMinutes(2).ToString("dd-MM-yyyy h:mm:ss tt");
@@ -452,7 +455,7 @@ namespace CompunetCbte.Controllers
 
             if (studentdetails != null)
             {
-                await ProcessResult(model, studentdetails, scoreCount);
+                await ProcessResult(model.CourseId, studentdetails, scoreCount);
             }
 
             //return RedirectToAction("Index", "ExamLogs", new
@@ -463,7 +466,7 @@ namespace CompunetCbte.Controllers
             //    semesterId = model.SemesterId,
             //    sessionId = model.SessionId
             //});
-            return View("FinishExam");
+            return RedirectToAction("LogOff", "Account");
         }
 
         public ActionResult FinishExam()
@@ -471,9 +474,9 @@ namespace CompunetCbte.Controllers
             return View();
         }
 
-        private async Task ProcessResult(DisplayQuestionViewModel model, StudentQuestion studentdetails, double scoreCount)
+        private async Task ProcessResult(int courseId, StudentQuestion studentdetails, double scoreCount)
         {
-            var examRule = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(model.CourseId))
+            var examRule = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(courseId))
                                     .Select(s => new { scorePerQuestion = s.ScorePerQuestion, totalQuestion = s.TotalQuestion })
                                     .FirstOrDefaultAsync();
             double sum = examRule.scorePerQuestion * examRule.totalQuestion;
@@ -574,40 +577,34 @@ namespace CompunetCbte.Controllers
         }
 
 
-        public async Task<ActionResult> SubmitExam(string studentId, int courseId, int levelId, int examType)
+        public async Task<ActionResult> SubmitExam(string studentId, int courseId, int examType)
         {
+            double scoreCount = 0;
             string myStudentId = studentId.Trim();
             var semesterId = await _db.Semesters.AsNoTracking()
                     .Where(x => x.ActiveSemester.Equals(true))
                     .Select(c => c.SemesterId)
                     .FirstOrDefaultAsync();
-            var sessionid =
+            var sessionId =
                 await _db.Sessions.AsNoTracking()
                     .Where(x => x.ActiveSession.Equals(true))
                     .Select(c => c.SessionId)
                     .FirstOrDefaultAsync();
-            double scoreCount = await _db.StudentQuestions.Where(x => x.StudentId.Equals(myStudentId) && x.SemesterId.Equals(semesterId)
-                        && x.CourseId.Equals(courseId) && x.SessionId.Equals(sessionid))
-                        .CountAsync(c => c.IsCorrect.Equals(true));
 
-            var studentdetails =
-                _db.StudentQuestions.FirstOrDefault(x => x.StudentId.Equals(studentId) && x.CourseId.Equals(courseId)
-                                                         && x.SessionId.Equals(sessionid)
-                                                         && x.SemesterId.Equals(semesterId));
+
+
+
+            scoreCount = await _db.StudentQuestions.Where(x => x.StudentId.Equals(studentId) && x.CourseId.Equals(courseId)
+                                                               && x.SessionId.Equals(sessionId) && x.SemesterId.Equals(semesterId))
+                .CountAsync(c => c.IsCorrect.Equals(true));
+            var studentdetails = _db.StudentQuestions.FirstOrDefault(x => x.StudentId.Equals(studentId) && x.CourseId.Equals(courseId)
+                                                                          && x.SessionId.Equals(sessionId) && x.SemesterId.Equals(semesterId));
 
             if (studentdetails != null)
             {
-                var model = new ExamLogVm()
-                {
-                    StudentId = studentId,
-                    CourseId = courseId,
-                    LevelId = levelId,
-                    ExamTypeId = examType
-
-                };
-                await ProcessResultTimeOut(model, studentdetails, scoreCount);
-
+                await ProcessResult(courseId, studentdetails, scoreCount);
             }
+
 
             //return RedirectToAction("Index", "ExamLogs", new
             //{
@@ -617,7 +614,7 @@ namespace CompunetCbte.Controllers
             //    semesterId = semesterId,
             //    sessionId = sessionid
             //});
-            return View("FinishExam");
+            return RedirectToAction("LogOff", "Account");
         }
 
         public async Task<ActionResult> ExamIndex(string studentId, int? courseId, string score)

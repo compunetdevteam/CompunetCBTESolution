@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ExamSolutionModel.Student>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "LoginUsers";
+}
+
+<h2> Number of Exam Login Users (@ViewBag.LoginUserNumber)</h2>
+
+
+@{
+    int no = 1;
+}
+
+<table class="table">
+    <tr><th>
+            S/No
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            Department Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Passport)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @no
+                @{ no = no + 1;}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department.DeptName)
+            </td>
+            <td>
+                <img src="@Url.Action("RenderImage", "Students", new { studentId = item.StudentId})" width="100" height="100" />
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "Students", new {id = item.StudentId}, null)
+            </td>
+        </tr>
+    }
+
+</table>
+
+

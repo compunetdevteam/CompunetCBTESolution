@@ -184,6 +184,12 @@
 
 
 <script>
+    history.pushState(null, document.title, location.href);
+    window.addEventListener('popstate', function (event)
+    {
+        history.pushState(null, document.title, location.href);
+    });
+
     var i = "@TempData["UserMessage"]";
    
     @*// window.alert(i);
@@ -201,7 +207,6 @@
     else if (check3 === 0) {
         alertify.deafult('@TempData["UserMessage"]');
     }
-
 
 
 </script>

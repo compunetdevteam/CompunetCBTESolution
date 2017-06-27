@@ -60,6 +60,13 @@ namespace CompunetCbte.Controllers
             }
         }
 
+        public async Task<ActionResult> LoginUsers()
+        {
+            var users = await _db.Students.Where(x => x.IsLogin.Equals(true)).ToListAsync();
+            ViewBag.LoginUserNumber = users.Count();
+            return View(users);
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -108,8 +115,10 @@ namespace CompunetCbte.Controllers
             }
         }
 
-        public ActionResult CustomDashborad(string username)
+        public async Task<ActionResult> CustomDashborad(string username)
         {
+
+
             if (User.IsInRole(RoleName.Admin))
             {
                 TempData["UserMessage"] = $"Login Successful, Welcome {username}";
@@ -120,6 +129,12 @@ namespace CompunetCbte.Controllers
 
             if (User.IsInRole(RoleName.Student))
             {
+                var model = await _db.Students.Where(x => x.StudentId.Equals(username)).FirstOrDefaultAsync();
+                model.IsLogin = true;
+                _db.Entry(model).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                //IdentityResult result = await UserManager.UpdateAsync(model);
                 TempData["UserMessage"] = $"Login Successful, Welcome {username}";
                 TempData["Title"] = "Success.";
                 return RedirectToAction("SelectSubject", "TakeExam");
@@ -327,7 +342,7 @@ namespace CompunetCbte.Controllers
                                 PhoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim(),
                                 Gender = workSheet.Cells[row, 7].Value.ToString().Trim(),
                                 Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
-                                ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
+                               // ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
                                 DepartmentId = deptCode.DepartmentId,
                                 Passport = ImageToByteArray(pic.Image),
                             };
@@ -351,10 +366,20 @@ namespace CompunetCbte.Controllers
                         try
                         {
                             var studentId = workSheet.Cells[row, 1].Value.ToString().Trim();
+                            var firstName = workSheet.Cells[row, 1].Value.ToString().Trim();
+                            var middleName = workSheet.Cells[row, 1].Value.ToString().Trim();
+                            var lastName = workSheet.Cells[row, 1].Value.ToString().Trim();
                             var email = workSheet.Cells[row, 5].Value.ToString().Trim();
                             var phoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim();
                             var password = workSheet.Cells[row, 8].Value.ToString().Trim();
-                            var user = new ApplicationUser { UserName = studentId, Email = email, PhoneNumber = phoneNumber };
+                            var user = new ApplicationUser
+                            {
+                                UserName = studentId,
+                                Email = email,
+                                PhoneNumber = phoneNumber,
+                                FullName = $"{lastName} {firstName} {middleName}"
+
+                            };
                             var result = await UserManager.CreateAsync(user, password);
                             if (result.Succeeded)
                             {
@@ -688,11 +713,16 @@ namespace CompunetCbte.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> LogOff()
         {
+            string username = User.Identity.GetUserName();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            var model = await _db.Students.Where(x => x.StudentId.Equals(username)).FirstOrDefaultAsync();
+            model.IsLogin = false;
+            _db.Entry(model).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
 

@@ -1672,6 +1672,7 @@
     <Content Include="ExcelTemplate\CbteQuestionUpload.xlsx" />
     <Content Include="ExcelTemplate\CbteStudentTemplate.xlsx" />
     <None Include="Properties\PublishProfiles\CompunetExamSolutionDemo - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1804,6 +1805,7 @@
     <Content Include="Views\DepartmentCourses\Index.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Home\DashBoard.cshtml" />
+    <Content Include="Views\Account\LoginUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

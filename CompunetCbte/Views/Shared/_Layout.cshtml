@@ -103,7 +103,7 @@
                             <li><a href="../../html/pages/calendar.html">School Events</a></li>
                             <li class="divider"></li>
                             <li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>
-                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Get, new { id = "logoutForm" }))
                             {
                                 @Html.AntiForgeryToken()
                                     

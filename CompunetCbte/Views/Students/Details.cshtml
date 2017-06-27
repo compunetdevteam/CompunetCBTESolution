@@ -70,9 +70,9 @@
             @Html.DisplayNameFor(model => model.Passport)
         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Passport)
-        </dd>
+        <td>
+            <img src="@Url.Action("RenderImage", new { studentId = Model.StudentId})" width="100" height="100" />
+        </td>
 
     </dl>
 </div>
