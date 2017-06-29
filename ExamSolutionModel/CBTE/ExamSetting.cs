@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using SwiftKampusModel.CBTE;
 
 namespace ExamSolutionModel.CBTE
 {
@@ -28,11 +27,11 @@ namespace ExamSolutionModel.CBTE
         public DateTime ExamDate { get; set; }
 
         [Display(Name = "Exam Start Time (Hours)")]
-        [Range(1,23)]
+        [Range(0, 23)]
         public int ExamStartTime { get; set; }
 
         [Display(Name = "Exam End Time (Hours)")]
-        [Range(1, 23)]
+        [Range(0, 23)]
         public int ExamEndTime { get; set; }
 
         public int ExamTypeId { get; set; }

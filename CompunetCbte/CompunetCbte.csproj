@@ -1806,6 +1806,9 @@
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Home\DashBoard.cshtml" />
     <Content Include="Views\Account\LoginUsers.cshtml" />
+    <Content Include="Views\TakeExam\SelectExamIndex.cshtml" />
+    <Content Include="Views\TakeExam\ShowNumbers.cshtml" />
+    <Content Include="Views\TakeExam\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

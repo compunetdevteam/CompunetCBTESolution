@@ -10,4 +10,13 @@ namespace CompunetCbte.ViewModels.CBTE
 
         public int ExamTypeId { get; set; }
     }
+
+    public class SelectSubjectVm
+    {
+        [Display(Name = "Subject Name")]
+        [Required(ErrorMessage = "Subject Name is required")]
+        public int SubjectName { get; set; }
+
+        public int ExamTypeId { get; set; }
+    }
 }

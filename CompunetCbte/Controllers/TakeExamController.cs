@@ -26,27 +26,35 @@ namespace CompunetCbte.Controllers
             _db = new OnlineCbte();
         }
 
-
-        //// GET: TakeExam
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
-
-        public async Task<ActionResult> SelectSubject()
+        public async Task<ActionResult> ShowNumbers()
         {
-            ExamRule examRule = new ExamRule();
+            string studentName = User.Identity.GetUserName();
+            var questionNumber = _db.StudentQuestions.Where(x => x.StudentId.Equals(studentName))
+                .OrderBy(o => o.QuestionNumber);
+            return View(questionNumber);
+        }
+        public PartialViewResult Menu(string studentId, int courseId)
+        {
+            var questionNumber = _db.StudentQuestions.Where(x => x.StudentId.Equals(studentId)
+                                    && x.CourseId.Equals(courseId))
+                .OrderBy(o => o.QuestionNumber);
+            return PartialView(questionNumber);
+        }
+
+
+        // GET: ExamInstruction
+        public async Task<ActionResult> SelectExamIndex()
+        {
             string studentName = User.Identity.GetUserName();
             var deptId = await _db.Students.Where(x => x.StudentId.Equals(studentName))
-                                .Select(s => s.DepartmentId).FirstOrDefaultAsync();
+                .Select(s => s.DepartmentId).FirstOrDefaultAsync();
             var examtype = _db.ExamTypes.AsNoTracking().Where(x => x.ActiveExam.Equals(true));
 
             var date = DateTime.Now;
             var currentExam = await _db.ExamSettings.AsNoTracking().Where(x => DbFunctions.TruncateTime(x.ExamDate) == DbFunctions.TruncateTime(DateTime.Today)
-                                                && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour
-                                                && x.Course.DepartmentCourses.Where(v => v.DepartmentId.Equals(deptId))
-                                                    .Select(s => s.DepartmentId).FirstOrDefault().Equals(deptId)).ToListAsync();
+                                                                               && x.ExamStartTime <= date.Hour && x.ExamEndTime >= date.Hour
+                                                                               && x.Course.DepartmentCourses.Where(v => v.DepartmentId.Equals(deptId))
+                                                                                   .Select(s => s.DepartmentId).FirstOrDefault().Equals(deptId)).ToListAsync();
 
             var currentCourse = new List<Course>();
 
@@ -55,22 +63,35 @@ namespace CompunetCbte.Controllers
                 currentCourse.Add(item.Course);
 
             }
-            if (currentCourse.Count == 1)
-            {
-                var examTypeId = examtype.Select(s => s.ExamTypeId).FirstOrDefault();
-                var courseId = currentCourse.Select(s => s.CourseId).FirstOrDefault();
-                var rules = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(courseId)
-                                        && x.ResultDivision.Equals(examTypeId)).FirstOrDefaultAsync();
-                examRule = rules;
-            }
+            ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
+            ViewBag.ExamTypeId = new SelectList(examtype, "ExamTypeId", "ExamName");
+            return View();
+        }
+
+
+        public async Task<ActionResult> SelectSubject(SelectSubjectVm model)
+        {
+            ExamRule examRule = new ExamRule();
+            string studentName = User.Identity.GetUserName();
+            var deptId = await _db.Students.Where(x => x.StudentId.Equals(studentName))
+                                .Select(s => s.DepartmentId).FirstOrDefaultAsync();
+            var examtype = _db.ExamTypes.AsNoTracking().Where(x => x.ActiveExam.Equals(true));
+            var date = DateTime.Now;
+            var currentExam = await _db.ExamSettings.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName)).FirstOrDefaultAsync();
+
+
+            var rules = await _db.ExamRules.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName)
+                                        && x.ResultDivision.Equals(model.ExamTypeId)).FirstOrDefaultAsync();
+            examRule = rules;
+
 
             ViewBag.ExamTime = examRule.MaximumTime;
             ViewBag.TotalQuestion = examRule.TotalQuestion;
             ViewBag.ScorePerQuestion = examRule.ScorePerQuestion;
-            ViewBag.StartTime = currentExam.Select(s => s.ExamStartTime).FirstOrDefault();
-            ViewBag.EndTime = currentExam.Select(s => s.ExamEndTime).FirstOrDefault();
+            ViewBag.StartTime = currentExam.ExamStartTime;
+            ViewBag.EndTime = currentExam.ExamEndTime;
             ViewBag.ServerDate = date;
-            ViewBag.SubjectName = new SelectList(currentCourse, "CourseId", "CourseName");
+            ViewBag.SubjectName = new SelectList(_db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName)), "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(examtype, "ExamTypeId", "ExamName");
             Session["Rem_Time"] = null;
             ViewBag.Time = Session["Rem_Time"];
@@ -209,13 +230,14 @@ namespace CompunetCbte.Controllers
             int myno = questionNo;
             var question = _db.StudentQuestions.AsNoTracking().Include(i => i.ExamType)
                                         .FirstOrDefault(s => s.StudentId.Equals(studentid)
-                                        && s.QuestionNumber.Equals(myno));
+                                        && s.QuestionNumber.Equals(myno) && s.CourseId.Equals(courseId));
             if (question != null)
             {
                 if (Session["Rem_Time"] == null)
                 {
                     int time = question.ExamTime;
                     Session["Rem_Time"] = DateTime.Now.AddMinutes(time).ToString("MM-dd-yyyy h:mm:ss tt");
+                    //Session["Rem_Time"] = DateTime.Now.AddMinutes(1).ToString("MM-dd-yyyy h:mm:ss tt");
                 }
                 //Session["Rem_Time"] = DateTime.Now.AddMinutes(2).ToString("dd-MM-yyyy h:mm:ss tt");
                 // Session["Rem_Time"] = DateTime.Now.AddMinutes(2).ToString("MM-dd-yyyy h:mm:ss tt");
@@ -466,7 +488,9 @@ namespace CompunetCbte.Controllers
             //    semesterId = model.SemesterId,
             //    sessionId = model.SessionId
             //});
-            return RedirectToAction("LogOff", "Account");
+            var myMsg = "Exam Saved Successfully...";
+            TempData["Message"] = myMsg;
+            return RedirectToAction("LogOff", "Account", new { message = myMsg });
         }
 
         public ActionResult FinishExam()
@@ -643,6 +667,7 @@ namespace CompunetCbte.Controllers
                 question.Check2 = model.Check2;
                 question.Check3 = model.Check3;
                 question.Check4 = model.Check4;
+                question.FilledAnswer = answer;
                 _db.Entry(question).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
             }
@@ -654,6 +679,7 @@ namespace CompunetCbte.Controllers
                 question.Check2 = model.Check2;
                 question.Check3 = model.Check3;
                 question.Check4 = model.Check4;
+                question.FilledAnswer = answer;
                 _db.Entry(question).State = System.Data.Entity.EntityState.Modified;
                 await _db.SaveChangesAsync();
             }
