@@ -1411,6 +1411,7 @@
     <Content Include="Content\chosen.css" />
     <Content Include="Content\download.jpg" />
     <Content Include="Content\Images\Ebonyi.png" />
+    <Content Include="Content\Images\HAS-201.jpg" />
     <Content Include="Content\Images\icon.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
