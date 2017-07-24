@@ -141,7 +141,7 @@ namespace CompunetCbte.Controllers
                     {
                         ViewBag.SubjectName = new SelectList(_db.Courses.AsNoTracking(), "CourseId", "CourseName");
                         ViewBag.ExamTypeId = new SelectList(_db.ExamTypes.AsNoTracking(), "ExamTypeId", "ExamName");
-                        ViewBag.ErrorMessage = $"You have already Taken the exam, If you try thrice, the will carry" +
+                        ViewBag.ErrorMessage = $"You have already Taken this exam, If you try thrice, You will carry" +
                                                $" the course over ";
                         return View(model);
                         // return warning message that exam has been taken already
