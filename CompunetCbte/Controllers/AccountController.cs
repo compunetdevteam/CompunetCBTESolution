@@ -87,8 +87,15 @@ namespace CompunetCbte.Controllers
             {
                 return View(model);
             }
-            var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Email.Equals(model.Email) || c.PhoneNumber.Equals(model.Email) || c.UserName.Equals(model.Email));
-
+            var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(c => c.UserName.Equals(model.Email));
+            var users = _db.Students.FirstOrDefault(x => x.StudentId.Equals(model.Email));
+            if (users != null && users.IsLogin == true)
+            {
+                ModelState.AddModelError("", @"User is alredy Login, Please check you Student ID and try again");
+                TempData["UserMessage"] = $"Login Fails..., Please Check your UserName and Password Or Click on ForgetPassword";
+                TempData["Title"] = "Error.";
+                return View(model);
+            }
             if (user == null)
             {
                 ModelState.AddModelError("", @"User doesn't Exist.");
@@ -342,7 +349,7 @@ namespace CompunetCbte.Controllers
                                 PhoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim(),
                                 Gender = workSheet.Cells[row, 7].Value.ToString().Trim(),
                                 Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
-                               // ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
+                                // ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
                                 DepartmentId = deptCode.DepartmentId,
                                 //Passport = ImageToByteArray(pic.Image),
                             };
