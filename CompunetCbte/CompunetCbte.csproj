@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44321</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -728,6 +728,9 @@
     <Content Include="Content\Images\exam5.jpg" />
     <Content Include="Content\Images\HAS-201.jpg" />
     <Content Include="Content\Images\icon.png" />
+    <Content Include="Content\Images\log.JPG" />
+    <Content Include="Content\Images\logQuestion5.JPG" />
+    <Content Include="Content\Images\logQuestion6.JPG" />
     <Content Include="Content\Images\test3.jpg" />
     <Content Include="Content\mdboostrap\bootstrap.min.css" />
     <Content Include="Content\mdboostrap\mdb.min.css" />

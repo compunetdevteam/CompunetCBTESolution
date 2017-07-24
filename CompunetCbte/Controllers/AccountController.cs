@@ -351,7 +351,7 @@ namespace CompunetCbte.Controllers
                                 Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
                                 // ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
                                 DepartmentId = deptCode.DepartmentId,
-                                Passport = ImageToByteArray(pic.Image),
+                                //Passport = ImageToByteArray(pic.Image),
                             };
 
                             _db.Students.Add(student);
