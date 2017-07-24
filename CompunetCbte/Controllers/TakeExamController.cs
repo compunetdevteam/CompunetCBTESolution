@@ -38,6 +38,7 @@ namespace CompunetCbte.Controllers
             var questionNumber = _db.StudentQuestions.Where(x => x.StudentId.Equals(studentId)
                                     && x.CourseId.Equals(courseId))
                 .OrderBy(o => o.QuestionNumber);
+
             return PartialView(questionNumber);
         }
 

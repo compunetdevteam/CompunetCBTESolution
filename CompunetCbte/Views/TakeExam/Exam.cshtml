@@ -194,7 +194,7 @@
                         <p>
                             @if (Model.QuestionNumber != Model.TotalQuestion)
                             {
-                                <span><input type="submit" id="next" value="Next" class="btn btn-block btn-raised btn-primary" name="action:Next" /></span>
+                                <span><input id="nextButton" type="submit" id="next" value="Next" class="btn btn-block btn-raised btn-primary" name="action:Next" /></span>
                             }
                         </p>
                         @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-primary">Primary</button>
@@ -286,9 +286,14 @@
             }
             document.getElementById("demo").innerHTML = txt;
         }
+        function oSubmit() {
+            $('#nextButton').trigger('click');
+        }
+
+        //window.oSubmit = $('#nextButton').trigger('click'); 
         // window.alert("ready");
         $(document).ready(function () {
-           
+            //window.oSubmit = $('#nextButton').trigger('click');
             //document.getElementById('submitExam2').style.visibility = 'hidden';
             var dt = '@ViewBag.Rem_Time';
             var dateAr = dt.split('-');
