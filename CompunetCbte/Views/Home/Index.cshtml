@@ -4,61 +4,71 @@
          Layout = "~/Views/Shared/_Layout2.cshtml";
    
 }
+<link href="~/Content/mdboostrap/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/mdboostrap/mdb.min.css" rel="stylesheet" />
 
-
-<div id="thumbnail-preview-indicators" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#thumbnail-preview-indicators" data-slide-to="0" class="active">
-            <div class="thumbnail">
-          
-                <img class="img-responsive" src="~/Content/download.jpg">
+<!--Carousel Wrapper-->
+<div id="carousel-example-2" class="carousel slide carousel-fade" data-ride="carousel">
+    <!--Indicators-->
+    @*<ol class="carousel-indicators">
+        <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-2" data-slide-to="1"></li>
+        <li data-target="#carousel-example-2" data-slide-to="2"></li>
+    </ol>*@
+    <!--/.Indicators-->
+    <!--Slides-->
+    <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active">
+            <div class="view hm-black-light">
+                <img class="img-responsive" src="~/Content/Images/exam5.jpg" alt="First slide" />
             </div>
-        </li>
-        <li data-target="#thumbnail-preview-indicators" data-slide-to="1">
-            <div class="thumbnail">
-                <img class="img-responsive" src="https://s3.amazonaws.com/ooomf-com-files/tU3ptNgGSP6U2fE67Gvy_SYDNEY-162.jpg">
-            </div>
-        </li>
-        <li data-target="#thumbnail-preview-indicators" data-slide-to="2">
-            <div class="thumbnail">
-                <img class="img-responsive" src="https://s3.amazonaws.com/ooomf-com-files/mtNrf7oxS4uSxTzMBWfQ_DSC_0043.jpg">
-            </div>
-        </li>
-    </ol>
-    <div class="carousel-inner">
-        <div class="item slides active">
-            <div class="slide-1"></div>
-            <div class="container">
-                <div class="carousel-caption">
-                    <h1>EBONYI STATE UNIVERSITY</h1>
-                    <p>Computer Based Examination</p>
-                    <p><a class="btn btn-lg btn-primary" href="@Url.Action("Login", "Account")" role="button">LOGIN</a></p>
-                </div>
+            <div class="carousel-caption">
+                <h3 class="h3-responsive">Welcome...</h3>
+                <h1>COMPUTER BASED TEST</h1>
+                <h3 class="h3-responsive">for Ebonyi State University</h3>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-success">CLICK HERE TO BEGIN</a>
+                </p>
             </div>
         </div>
-        <div class="item slides">
-            <div class="slide-2"></div>
-            <div class="container">
-                <div class="carousel-caption">
-                    <h1>Another example headline.</h1>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
-                </div>
+        <div class="carousel-item">
+            <!--Mask color-->
+            <div class="view hm-black-strong">
+                <img class="img-responsive" src="~/Content/Images/exam1.jpg" alt="Second slide">
+            </div>
+            <div class="carousel-caption">
+                <h3 class="h3-responsive">Welcome...</h3>
+                <h1>COMPUTER BASED TEST</h1>
+                <h3>of Ebonyi State University</h3>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-success">CLICK HERE TO BEGIN</a>
+
             </div>
         </div>
-        <div class="item slides">
-            <div class="slide-3"></div>
-            <div class="container">
-                <div class="carousel-caption">
-                    <h1>One more for good measure.</h1>
-                    <p>Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
-                </div>
+        <div class="carousel-item">
+            <!--Mask color-->
+            <div class="view hm-black-slight">
+                <img class="img-responsive" src="~/Content/Images/exam5.jpg" alt="Third slide">
+            </div>
+            <div class="carousel-caption">
+                <h1>COMPUTER BASED TEST</h1>
+                <h3 class="h3-responsive">Welcome...</h3>
+                <p><button class="btn btn-success">LOGIN</button>
+                </p>
             </div>
         </div>
     </div>
-    <a class="left carousel-control" href="#thumbnail-preview-indicators" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-    <a class="right carousel-control" href="#thumbnail-preview-indicators" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-</div> 
+    <!--/.Slides-->
+    <!--Controls-->
+    <a class="carousel-control-prev" href="#carousel-example-2" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carousel-example-2" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    <!--/.Controls-->
+</div>
+<!--/.Carousel Wrapper-->
+
+
 

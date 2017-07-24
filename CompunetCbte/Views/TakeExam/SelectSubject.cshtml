@@ -2,61 +2,68 @@
 
 @{
     ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
 
 <div class="well">
-    <h2>Instruction(s)</h2>
+   
+        <h2>Instructions for @ViewBag.MySubject Exam</h2>
     <p>
         <ol class="text-bold text-info">
-            <li>The Duration of the Selected Exam is <i>@ViewBag.ExamTime</i> min(s)</li>
-            <li> The Exam Start Time is <i>@ViewBag.StartTime:00</i> and Stop time is <i>@ViewBag.EndTime:00</i></li>
-            <li>The Total Number of Question for the Exam is <i>@ViewBag.TotalQuestion</i> </li>
-            <li>The score per Question is <i>@ViewBag.ScorePerQuestion</i>  marks</li>
+            <li>You are expected to attempt this subject for <i>@ViewBag.ExamTime</i> minutes</li>
+            <li> There are <i>@ViewBag.TotalQuestion</i> questions and you are expected to attempt all.</li>
+            <li>If you do not understand a question, you can skip by clicking the NEXT button to come back to it.</li>
+            <li>Upon answering the Last question, the review and finish button will be activated.
+                You can either click on the finish button to move to the next subject <br/> or click on
+                the review button to revisit the skipped questions. On the review page you can select the question number,
+                and it takes you to the question.</li>
+            <li>After the review you can now click on the finish button to go to the next subject.</li>
+            <li>Repeat step 4 for every subject.</li>
+            <li>At the end of the examination, click on the submit button and Confirm Submitting the Exam.</li>
+            <li>If you exhaust your time, the system will end the test for you automatically and present your final result.</li>
         </ol>
     </p>
+
+    <p>NOTE: Click the start button below to retrieve your questions. The timer will start immediately.</p>
+    <p>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                <hr/>
+                <h2>@ViewBag.ErrorMessage</h2>
+                @*<h2>@ViewBag.ServerDate</h2>*@
+                @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                <div class="form-group">
+                    <div class="col-md-7">
+                        @Html.DropDownList("SubjectName", null, new {style = "display:none"})
+                        @Html.ValidationMessageFor(model => model.SubjectName, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-7">
+                        @Html.DropDownList("ExamTypeId", null, new {style = "display:none"})
+                        @Html.ValidationMessageFor(model => model.ExamTypeId, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Start Exam" class="btn ink-reaction btn-raised btn-primary btn-loading-state"/>
+                    </div>
+                </div>
+            </div>
+        }
+    </p>
+
 </div>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-      
-        <hr />
-        <h2>@ViewBag.ErrorMessage</h2>
-        @*<h2>@ViewBag.ServerDate</h2>*@
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.Label("SubjectName", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-7">
-                @Html.DropDownList("SubjectName", null, htmlAttributes: new { @class = "form-control", @readonly = "true" })
-                @Html.ValidationMessageFor(model => model.SubjectName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        @*<div class="form-group">
-            @Html.Label("Level Name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("LevelId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.LevelId, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-        <div class="form-group">
-            @Html.Label("Exam Type", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-7">
-                @Html.DropDownList("ExamTypeId", null, htmlAttributes: new { @class = "form-control", @readonly = "true" })
-                @Html.ValidationMessageFor(model => model.ExamTypeId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Start Exam" class="btn ink-reaction btn-raised btn-primary btn-loading-state" />
-            </div>
-        </div>
-    </div>
-}
-
-<h2>@ViewBag.ServerDate</h2>
+@*<h2>@ViewBag.ServerDate</h2>*@

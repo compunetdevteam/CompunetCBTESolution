@@ -91,6 +91,8 @@ namespace CompunetCbte.Controllers
             ViewBag.StartTime = currentExam.ExamStartTime;
             ViewBag.EndTime = currentExam.ExamEndTime;
             ViewBag.ServerDate = date;
+            ViewBag.MySubject = _db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName))
+                .Select(s => s.CourseName).FirstOrDefault();
             ViewBag.SubjectName = new SelectList(_db.Courses.AsNoTracking().Where(x => x.CourseId.Equals(model.SubjectName)), "CourseId", "CourseName");
             ViewBag.ExamTypeId = new SelectList(examtype, "ExamTypeId", "ExamName");
             Session["Rem_Time"] = null;
@@ -236,7 +238,7 @@ namespace CompunetCbte.Controllers
                 if (Session["Rem_Time"] == null)
                 {
                     int time = question.ExamTime;
-                    Session["Rem_Time"] = DateTime.Now.AddMinutes(time).ToString("MM-dd-yyyy h:mm:ss tt");
+                    Session["Rem_Time"] = DateTime.Now.AddMinutes(50).ToString("MM-dd-yyyy h:mm:ss tt");
                     //Session["Rem_Time"] = DateTime.Now.AddMinutes(1).ToString("MM-dd-yyyy h:mm:ss tt");
                 }
                 //Session["Rem_Time"] = DateTime.Now.AddMinutes(2).ToString("dd-MM-yyyy h:mm:ss tt");

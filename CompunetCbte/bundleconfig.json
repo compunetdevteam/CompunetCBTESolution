@@ -1,0 +1,37 @@
+[
+  {
+    "outputFileName": "assets/css/theme-default/matrialthemedefault.css",
+    "inputFiles": [
+      "assets/css/theme-default/bootstrap.css",
+      "assets/css/theme-default/font-awesome.min.css",
+      "assets/css/theme-default/material-design-iconic-font.min.css",
+      "assets/css/theme-default/materialadmin.css"
+    ]
+  },
+  {
+    "outputFileName": "assets/css/theme-default/libs/summernote/externalFile.css",
+    "inputFiles": [
+      "assets/css/theme-default/libs/summernote/summernote.css",
+      "assets/css/theme-default/libs/rickshaw/rickshaw.css",
+      "assets/css/theme-default/libs/morris/morris.core.css"
+    ]
+  },
+  {
+    "outputFileName": "assets/css/theme-default/CombinedMinified.css",
+    "inputFiles": [
+      "assets/css/theme-default/matrialthemedefault.css",
+      "assets/css/theme-default/externalFile.css"
+    ]
+  },
+  {
+    "outputFileName": "assets/js/combinedJs.js",
+    "inputFiles": [
+      "assets/js/core/source/AppNavigation.js",
+      "assets/js/core/demo/DemoFormEditors.js",
+      "assets/js/core/demo/DemoFormLayouts.js",
+      "assets/js/libs/ckeditor/adapters/jquery.js",
+      "assets/js/libs/ckeditor/ckeditor.js",
+      "assets/js/libs/jquery/jquery-1.11.2.min.js"
+    ]
+  }
+]

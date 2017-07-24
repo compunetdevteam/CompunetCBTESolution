@@ -18,16 +18,8 @@
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/modernizr")
 
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/bootstrap.css?1422792965"/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/materialadmin.css?1425466319"/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/font-awesome.min.css?1422529194"/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/material-design-iconic-font.min.css?1421434286"/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/summernote/summernote.css?1425218701"/>
     <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/rickshaw/rickshaw.css?1422792967"/>
-    <link type="text/css" rel="stylesheet" href="~/assets/css/theme-default/libs/morris/morris.core.css?1420463396"/>
-
-    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/assets/css/theme-default/CombinedMinified.css" rel="stylesheet" />
    
     <!-- END STYLESHEETS -->
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -50,7 +42,7 @@
                             @{
                                 var schoolImage = @System.Configuration.ConfigurationManager.AppSettings["SchoolImage"];
                             }
-                            <img class="img-circle" src="~/Content/Images/@schoolImage"/>
+                            <img class="img-responsive" src="~/Content/Images/@schoolImage"/>
                             @*<span class="text-lg text-bold text-primary">@System.Configuration.ConfigurationManager.AppSettings["SchoolName"]</span>*@
                         </a>
                     </div>
@@ -147,19 +139,9 @@
 
 
 
-
-
-<!-- END BASE -->
-<!-- BEGIN JAVASCRIPT -->
-
-<script src="~/assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
-<script src="~/assets/js/libs/ckeditor/ckeditor.js"></script>
-<script src="~/assets/js/libs/ckeditor/adapters/jquery.js"></script>
-<script src="~/assets/js/libs/summernote/summernote.min.js"></script>
-
-
-<script src="~/assets/js/core/source/AppNavigation.js"></script>
-<script src="~/assets/js/core/demo/DemoFormEditors.js"></script>
+    <script src="~/assets/js/combinedJs.js"></script>
+    <script src="~/assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
+    <script src="~/assets/js/core/source/AppNavigation.js"></script>
 
 
 

@@ -137,7 +137,7 @@ namespace CompunetCbte.Controllers
                 //IdentityResult result = await UserManager.UpdateAsync(model);
                 TempData["UserMessage"] = $"Login Successful, Welcome {username}";
                 TempData["Title"] = "Success.";
-                return RedirectToAction("SelectSubject", "TakeExam");
+                return RedirectToAction("SelectExamIndex", "TakeExam");
             }
 
             if (User.IsInRole(RoleName.SuperAdmin))

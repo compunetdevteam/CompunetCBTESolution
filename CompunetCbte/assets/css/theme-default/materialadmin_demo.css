@@ -16,4 +16,47 @@
   cursor: default;
   color: #ffffff;
 }
+.form-group > label, .form-group .control-label {
+    font-size: 24px;
+    opacity: 1!important;
+    margin-bottom: 0;
+    color:coral;
+}
+li ul > li > a {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    padding: 7px 17px;
+    font-size: 12px;
+    line-height: normal;
+    border-radius: 0;
+    padding-left: 57px;
+    color: blanchedalmond;
+}
+.menubar-inverse .gui-controls li .title {
+    font-size: medium;
+    color: rgba(255, 255, 255, 0.55);
+    text-shadow: 0 1px 2px #000000;
+}
 
+.gui-icon .fa:first-child, .gui-icon .md:first-child, .gui-icon .glyphicon:first-child {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    line-height: 40px;
+    width: 1em;
+    color: aqua;
+}
+
+#menubar.menubar-inverse:before {
+    background: #336134;
+}
+body {
+    background: rgba(140, 167, 169, 0.26);
+    background-size: 100% 100%;
+    color: #333531;
+    -ms-overflow-style: scrollbar;
+}

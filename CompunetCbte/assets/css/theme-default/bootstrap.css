@@ -544,6 +544,7 @@
 .make-ratio(xs, 2, 1);
 .make-ratio(xs, 3, 1);
 
+
 // Small grid
 //
 // Small device range, from phones to tablets.
@@ -553,6 +554,7 @@
 	.make-ratio(sm, 3, 1);
 }
 
+
 // Medium grid
 //
 // For the desktop device range.
@@ -561,6 +563,7 @@
 	.make-ratio(md, 2, 1);
 	.make-ratio(md, 3, 1);
 }
+
 
 // Large grid
 //
@@ -7414,3 +7417,4 @@ button.close {
     display: none !important;
   }
 }
+

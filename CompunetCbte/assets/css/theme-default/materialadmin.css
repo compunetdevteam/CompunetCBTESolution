@@ -1068,16 +1068,16 @@ a.text-default-dark:hover {
   color: #caf0ee;
 }
 a.text-primary-bright:hover {
-  color: #a2e5e1;
+  color:  #384397;
 }
 .text-primary-light {
-  color: #7dd8d2;
+  color: #384397;
 }
 a.text-primary-light:hover {
-  color: #56cdc5;
+  color: #384397;
 }
 .text-primary {
-  color: #0aa89e;
+    color: #384397;
 }
 a.text-primary:hover {
   color: #077871;
@@ -2668,11 +2668,11 @@ legend.text-right:after {
   width: 0%;
 }
 label {
-  font-weight: 400;
+  font-weight: 700;
 }
 .form-group > label,
 .form-group .control-label {
-  font-size: 12px;
+  font-size: 14px;
   opacity: 0.5;
   margin-bottom: 0;
 }

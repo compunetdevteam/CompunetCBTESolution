@@ -22,9 +22,10 @@
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-6">
-                        <p><h3 class="text-warning">Timer Countdown </h3></p>
+                        <p><h3>Answered Questions are in Green Color while UnAnswered Question are in Red </h3></p>
                     </div>
                     <div class="col-md-6">
+                        <h3 class="text-warning">Exam Countdown</h3>
                         <h3 id="timecountdown"></h3>
                     </div>
                 </div>
@@ -183,7 +184,7 @@
                         <p>
                             @if (Model.QuestionNumber != 1)
                             {
-                                <input type="submit" id="previous" value="Previous" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Previous" />
+                                <input type="submit" id="previous" value="Previous" class="btn btn-block btn-raised btn-primary" name="action:Previous" />
                             }
                         </p>
                         @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-default">Default</button>
@@ -193,7 +194,7 @@
                         <p>
                             @if (Model.QuestionNumber != Model.TotalQuestion)
                             {
-                                <span><input type="submit" id="next" value="Next" class="btn btn-block ink-reaction btn-flat btn-raised btn-primary" name="action:Next" /></span>
+                                <span><input type="submit" id="next" value="Next" class="btn btn-block btn-raised btn-primary" name="action:Next" /></span>
                             }
                         </p>
                         @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-primary">Primary</button>
@@ -201,9 +202,9 @@
 
                     </div><!--end .col -->
                     <div class="col-sm-3">
-                        <p><span><input onclick="submitFunction()" value="Submit Exam"  class="btn btn-block ink-reaction btn-flat btn-raised btn-danger" /></span></p>
+                        <p><span><input onclick="submitFunction()" value="Submit Exam"  class="btn btn-block btn-danger btn-raised btn-danger" /></span></p>
 
-                        <p><span><input id="submitExam2" type="submit"  name="action:SubmitExam"/></span>
+                        <p><span><input id="submitExam2" type="submit" style = "display:none" name="action:SubmitExam"/></span>
                         </p>
                         @*<p><button type="button" class="btn btn-block ink-reaction btn-flat btn-accent">Accent</button>
                                 </p>*@
@@ -269,6 +270,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
     <script>
         // window.alert("Exam Fininshed because Your Time is Up, Click OK to Save your scores");
         //window.alert(5 + 6);
@@ -385,3 +387,4 @@
         //window.onbeforeunload = function () { return "You work will be lost."; };
     </script>
 }
+
