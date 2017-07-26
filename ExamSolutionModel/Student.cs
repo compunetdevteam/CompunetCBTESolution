@@ -10,6 +10,7 @@ namespace ExamSolutionModel
         public string StudentId { get; set; }
 
         public int DepartmentId { get; set; }
+        public string JambRegNo { get; set; }
         public string Password { get; set; }
         public bool IsLogin { get; set; }
 
@@ -21,5 +22,7 @@ namespace ExamSolutionModel
 
         public virtual Department Department { get; set; }
         public virtual ICollection<ExamLog> ExamLogs { get; set; }
+        public virtual ICollection<StudentQuestion> StudentQuestions { get; set; }
+
     }
 }

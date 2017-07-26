@@ -9,15 +9,15 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+@*<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Department.DeptCode)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.FullName)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.MiddleName)
         </th>
         <th>
@@ -44,9 +44,9 @@
             @Html.DisplayFor(modelItem => item.Department.DeptName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(modelItem => item.FullName)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.MiddleName)
         </td>
         <td>
@@ -76,4 +76,43 @@
     </tr>
 }
 
+</table>*@
+<table id="Jdatatable" class="table table-responsive table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Full Name</th>
+        <th>Student Id</th>
+        <th>Programme</th>
+        <th>Gender</th>
+        <th>Phone Number</th>
+        <th>Password</th>
+    </tr>
+    </thead>
 </table>
+
+@section Scripts{
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            $('#Jdatatable').DataTable({
+                "ajax": {
+                    "url": "/Students/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "FullName", "autoWidth": true },
+                    { "data": "StudentId", "autoWidth": true },
+                    { "data": "DeptName", "autoWidth": true },
+                    { "data": "Gender", "autoWidth": true },
+                    { "data": "PhoneNumber", "autoWidth": true },
+                    { "data": "Password", "autoWidth": true },
+                    //{ "data": "City", "autoWidth": true },
+                    //{ "data": "PostalCode", "autoWidth": true }
+                ]
+            });
+        });
+
+    </script>
+}

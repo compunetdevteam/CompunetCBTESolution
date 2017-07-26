@@ -1,6 +1,12 @@
 ﻿@{
     ViewBag.Title = "Home Page";
     
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+   
+}
+@{
+    ViewBag.Title = "Home Page";
+    
          Layout = "~/Views/Shared/_Layout2.cshtml";
    
 }
@@ -10,11 +16,11 @@
 <!--Carousel Wrapper-->
 <div id="carousel-example-2" class="carousel slide carousel-fade" data-ride="carousel">
     <!--Indicators-->
-    @*<ol class="carousel-indicators">
+    <ol class="carousel-indicators">
         <li data-target="#carousel-example-2" data-slide-to="0" class="active"></li>
         <li data-target="#carousel-example-2" data-slide-to="1"></li>
         <li data-target="#carousel-example-2" data-slide-to="2"></li>
-    </ol>*@
+    </ol>
     <!--/.Indicators-->
     <!--Slides-->
     <div class="carousel-inner" role="listbox">
@@ -27,7 +33,7 @@
                 <h1>COMPUTER BASED TEST</h1>
                 <h3 class="h3-responsive">for Ebonyi State University</h3>
                 <a href="@Url.Action("Login", "Account")" class="btn btn-success">CLICK HERE TO BEGIN</a>
-                </p>
+                
             </div>
         </div>
         <div class="carousel-item">
@@ -70,5 +76,50 @@
 </div>
 <!--/.Carousel Wrapper-->
 
+<!--Navbar-->
+@*<nav class="navbar fixed-top navbar-toggleable-md navbar-dark scrolling-navbar">
 
+    <div class="container">
 
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand" href="#">
+            <img src="images/Ebonyi.png" />
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+           
+            <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item">
+                    <a class="nav-link">Sign In</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>*@
+<!--/Navbar-->
+
+<!--Mask-->
+@*<div class="view intro" id="home">
+    <div class="hm-black-strong-1">
+        <div class="full-bg-img flex-center">
+            <div class="container">
+                <div class="row smooth-scroll">
+                    <div class="col-md-12 white-text text-center">
+                        <div class="wow fadeInDown" data-wow-delay="0.2s">
+                            <h2 class="brand-name font-bold mb-2">PRE-DEGREE EXAM</h2>
+                            <hr class="hr-light">
+                            <h3 class="subtext-header mt-2 mb-2"></h3>
+                            <span>Computer Based Examination</span>
+                        </div>
+                        <a href="#demo" data-offset="100" class="btn btn-rounded btn-indigo-2 wow fadeInLeft" data-wow-delay="0.2s">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+<!--/Mask-->

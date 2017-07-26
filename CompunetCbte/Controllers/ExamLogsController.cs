@@ -1,6 +1,8 @@
 ﻿using CompunetCbte.Models;
 using ExamSolutionModel.CBTE;
+using OfficeOpenXml;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -143,6 +145,45 @@ namespace CompunetCbte.Controllers
             if (examLog != null) _db.ExamLogs.Remove(examLog);
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        public async Task DownloadResult()
+        {
+            //var facilityList = Db.Communications.AsNoTracking().ToList();
+            char c1 = 'A';
+            ExcelPackage package = new ExcelPackage();
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Report");
+
+
+            worksheet.Cells[$"{c1++}1"].Value = "Exam Log ID";
+            worksheet.Cells[$"{c1++}1"].Value = "Full Name";
+            worksheet.Cells[$"{c1++}1"].Value = "Reg No";
+            worksheet.Cells[$"{c1++}1"].Value = "Subject Name";
+            worksheet.Cells[$"{c1++}1"].Value = "Score";
+
+
+            var results = await _db.ExamLogs.AsNoTracking().OrderBy(o => o.StudentId).ToListAsync();
+
+            int rowStart = 2;
+            char c2 = 'A';
+
+            foreach (ExamLog t in results)
+            {
+                worksheet.Cells[$"A{rowStart}"].Value = t.ExamLogId;
+                worksheet.Cells[$"B{rowStart}"].Value = t.Student.FullName;
+                worksheet.Cells[$"C{rowStart}"].Value = t.StudentId;
+                worksheet.Cells[$"D{rowStart}"].Value = t.Course.CourseName;
+                worksheet.Cells[$"E{rowStart}"].Value = t.Score;
+                rowStart++;
+            }
+            // var info = results.FirstOrDefault();
+            worksheet.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment: filename=" + $"PreDegreeExamResult.xlsx");
+            Response.BinaryWrite(package.GetAsByteArray());
+            Response.End();
+
         }
 
         protected override void Dispose(bool disposing)

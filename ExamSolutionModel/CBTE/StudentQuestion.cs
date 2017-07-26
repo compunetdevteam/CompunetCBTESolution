@@ -1,9 +1,12 @@
-﻿namespace ExamSolutionModel.CBTE
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ExamSolutionModel.CBTE
 {
     public class StudentQuestion
     {
         public int StudentQuestionId { get; set; }
         public string StudentId { get; set; }
+      
         public int CourseId { get; set; }
         // public int LevelId { get; set; }
         public int SemesterId { get; set; }
@@ -33,6 +36,8 @@
 
         public int ExamTime { get; set; }
 
+        public virtual Student Student { get; set; }
+        public virtual Course Course { get; set; }
         public virtual ExamType ExamType { get; set; }
 
     }

@@ -5,7 +5,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
 using System;
 using System.Data.Entity;
 using System.IO;
@@ -60,11 +59,23 @@ namespace CompunetCbte.Controllers
             }
         }
 
-        public async Task<ActionResult> LoginUsers()
+
+        public ActionResult LoginUsers()
         {
-            var users = await _db.Students.Where(x => x.IsLogin.Equals(true)).ToListAsync();
-            ViewBag.LoginUserNumber = users.Count();
-            return View(users);
+            //var users = await _db.Students.Where(x => x.IsLogin.Equals(true)).ToListAsync();
+            //ViewBag.LoginUserNumber = users.Count();
+            //return View(users);
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult GetLoginUsers()
+        {
+            // dc.Configuration.LazyLoadingEnabled = false; // if your table is relational, contain foreign key
+            var data = _db.Students.AsNoTracking().Where(x => x.IsLogin.Equals(true)).ToList()
+                .Select(s => new { s.StudentId, s.FullName, s.Department.DeptName });
+            //ViewBag.LoginUserNumber = data.Count();
+            return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+
         }
 
         //
@@ -147,12 +158,12 @@ namespace CompunetCbte.Controllers
                 return RedirectToAction("SelectExamIndex", "TakeExam");
             }
 
-            if (User.IsInRole(RoleName.SuperAdmin))
-            {
-                TempData["UserMessage"] = $"Login Successful, Welcome {username}";
-                TempData["Title"] = "Success.";
-                return RedirectToAction("SuperAdminDashBoard", "Students");
-            }
+            //if (User.IsInRole(RoleName.SuperAdmin))
+            //{
+            //    TempData["UserMessage"] = $"Login Successful, Welcome {username}";
+            //    TempData["Title"] = "Success.";
+            //    return RedirectToAction("SuperAdminDashBoard", "Students");
+            //}
             return RedirectToAction("Index", "Home");
         }
 
@@ -323,12 +334,12 @@ namespace CompunetCbte.Controllers
                     //}
                     for (int row = 2; row <= noOfRow; row++)
                     {
-                        var studentId = workSheet.Cells[row, 1].Value.ToString().Trim();
-                        var pic = workSheet.Drawings[studentId] as ExcelPicture;
+                        var regNo = workSheet.Cells[row, 3].Value.ToString().Trim();
+                        //var pic = workSheet.Drawings[studentId] as ExcelPicture;
 
-                        string code = workSheet.Cells[row, 9].Value.ToString().Trim();
+                        string code = workSheet.Cells[row, 8].Value.ToString().Trim();
                         var deptCode = await _db.Departments.AsNoTracking()
-                            .Where(x => x.DeptCode.ToUpper().Equals(code.ToUpper()))
+                            .Where(x => x.DeptName.ToUpper().Equals(code.ToUpper()))
                             .FirstOrDefaultAsync();
                         if (deptCode == null)
                         {
@@ -341,22 +352,20 @@ namespace CompunetCbte.Controllers
                             //ExcelPicture picture = workSheet.Drawings;
                             var student = new Student()
                             {
-                                StudentId = studentId,
-                                FirstName = workSheet.Cells[row, 2].Value.ToString().Trim(),
-                                MiddleName = workSheet.Cells[row, 3].Value.ToString().Trim(),
-                                LastName = workSheet.Cells[row, 4].Value.ToString().Trim(),
-                                Email = workSheet.Cells[row, 5].Value.ToString().Trim(),
-                                PhoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim(),
-                                Gender = workSheet.Cells[row, 7].Value.ToString().Trim(),
-                                Password = workSheet.Cells[row, 8].Value.ToString().Trim(),
-                                // ConfirmPassword = workSheet.Cells[row, 8].Value.ToString().Trim(),
+                                FullName = workSheet.Cells[row, 1].Value.ToString().Trim(),
+                                Gender = workSheet.Cells[row, 2].Value.ToString().Trim(),
+                                StudentId = regNo,
+                                JambRegNo = workSheet.Cells[row, 4].Value.ToString().Trim(),
+                                LGA = workSheet.Cells[row, 5].Value.ToString().Trim(),
+                                State = workSheet.Cells[row, 6].Value.ToString().Trim(),
+                                PhoneNumber = workSheet.Cells[row, 7].Value.ToString().Trim(),
                                 DepartmentId = deptCode.DepartmentId,
-                                //Passport = ImageToByteArray(pic.Image),
+                                Password = workSheet.Cells[row, 9].Value.ToString().Trim(),
                             };
 
                             _db.Students.Add(student);
                             recordCount++;
-                            lastrecord = $"The last Updated record has the Last Name {student.LastName} and First Name {student.FirstName} with Student Id {student.StudentId}";
+                            lastrecord = $"The last Updated record has the Name {student.FullName} with Student Id {student.StudentId}";
 
                         }
                         catch (Exception ex)
@@ -372,19 +381,17 @@ namespace CompunetCbte.Controllers
                     {
                         try
                         {
-                            var studentId = workSheet.Cells[row, 1].Value.ToString().Trim();
-                            var firstName = workSheet.Cells[row, 1].Value.ToString().Trim();
-                            var middleName = workSheet.Cells[row, 1].Value.ToString().Trim();
-                            var lastName = workSheet.Cells[row, 1].Value.ToString().Trim();
-                            var email = workSheet.Cells[row, 5].Value.ToString().Trim();
+                            var studentId = workSheet.Cells[row, 3].Value.ToString().Trim();
+                            var fullName = workSheet.Cells[row, 1].Value.ToString().Trim();
+                            //var email = workSheet.Cells[row, 5].Value.ToString().Trim();
                             var phoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim();
                             var password = workSheet.Cells[row, 8].Value.ToString().Trim();
                             var user = new ApplicationUser
                             {
                                 UserName = studentId,
-                                Email = email,
+                                //Email = email,
                                 PhoneNumber = phoneNumber,
-                                FullName = $"{lastName} {firstName} {middleName}"
+                                FullName = fullName
 
                             };
                             var result = await UserManager.CreateAsync(user, password);

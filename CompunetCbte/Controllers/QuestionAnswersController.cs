@@ -22,6 +22,14 @@ namespace CompunetCbte.Controllers
             _db = new OnlineCbte();
         }
 
+        public ActionResult GetData()
+        {
+            // dc.Configuration.LazyLoadingEnabled = false; // if your table is relational, contain foreign key
+            var data = _db.QuestionAnswers.Select(s => new { s.Course.CourseName, s.Question, s.Option1, s.Option2, s.Option3, s.Option4 }).ToList();
+            return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+
+        }
+
         // GET: QuestionAnswers
         public async Task<ActionResult> Index()
         {

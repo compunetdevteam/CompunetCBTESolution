@@ -386,6 +386,9 @@ else if (Request.IsAuthenticated && User.IsInRole("Admin"))
                             <li>@Html.ActionLink("View Exam Schedule", "Index", "ExamSettings")</li>
                         </ul><!--end /submenu -->
                     </li><!--end /menu-li -->
+                    <li>@Html.ActionLink("Active Users", "LoginUsers", "Account")</li>
+                    <li>@Html.ActionLink("Downlod Result", "DownloadResult", "ExamLogs")</li>
+
                     <li class="gui-folder">
                         <a href="javascript:void(0);">
                             <span class="title">Take Exam</span>

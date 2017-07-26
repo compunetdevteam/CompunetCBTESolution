@@ -1,32 +1,38 @@
-﻿using System;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using CompunetCbte.Models;
-using CompunetCbte.Services;
+﻿using CompunetCbte.Models;
 using ExamSolutionModel;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CompunetCbte.Controllers
 {
     public class StudentsController : Controller
     {
-        private OnlineCbte db = new OnlineCbte();
+        private readonly OnlineCbte _db;
+
+        public StudentsController()
+        {
+            _db = new OnlineCbte();
+        }
 
         // GET: Students
         public async Task<ActionResult> Index()
         {
-            var students = db.Students.Include(s => s.Department);
+            var students = _db.Students.Include(s => s.Department);
             return View(await students.ToListAsync());
         }
+        public ActionResult GetData()
+        {
+            // dc.Configuration.LazyLoadingEnabled = false; // if your table is relational, contain foreign key
+            var data = _db.Students.Select(s => new { s.FullName, s.StudentId, s.Department.DeptName, s.Gender, s.PhoneNumber, s.Password }).ToList();
+            return Json(new { data = data }, JsonRequestBehavior.AllowGet);
 
+        }
         // GET: Students/Details/5
         public async Task<ActionResult> Details(string id)
         {
@@ -34,7 +40,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await _db.Students.FindAsync(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -45,7 +51,7 @@ namespace CompunetCbte.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName");
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName");
             return View();
         }
 
@@ -58,9 +64,9 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Students.Add(student);
-                await db.SaveChangesAsync();
-                var store = new UserStore<ApplicationUser>(db);
+                _db.Students.Add(student);
+                await _db.SaveChangesAsync();
+                var store = new UserStore<ApplicationUser>(_db);
                 var manager = new UserManager<ApplicationUser>(store);
                 var user = new ApplicationUser { UserName = student.FullName, Email = student.Email, EmailConfirmed = true };
 
@@ -69,7 +75,7 @@ namespace CompunetCbte.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -80,12 +86,12 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await _db.Students.FindAsync(id);
             if (student == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -98,11 +104,11 @@ namespace CompunetCbte.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(student).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(student).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
+            ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DeptName", student.DepartmentId);
             return View(student);
         }
 
@@ -113,7 +119,7 @@ namespace CompunetCbte.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = await db.Students.FindAsync(id);
+            Student student = await _db.Students.FindAsync(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -126,14 +132,14 @@ namespace CompunetCbte.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            Student student = await db.Students.FindAsync(id);
-            db.Students.Remove(student);
-            await db.SaveChangesAsync();
+            Student student = await _db.Students.FindAsync(id);
+            _db.Students.Remove(student);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         public async Task<ActionResult> RenderImage(string studentId)
         {
-            Student student = await db.Students.FindAsync(studentId);
+            Student student = await _db.Students.FindAsync(studentId);
 
             byte[] photoBack = student.Passport;
 
@@ -199,7 +205,7 @@ namespace CompunetCbte.Controllers
         //            {
         //                var studentId = workSheet.Cells[row, 1].Value.ToString().Trim();
         //                var pic = workSheet.Drawings[studentId] as ExcelPicture;
-                        
+
         //                string code = workSheet.Cells[row, 9].Value.ToString().Trim();
         //                var deptCode = await db.Departments.AsNoTracking()
         //                    .Where(x => x.DeptCode.ToUpper().Equals(code.ToUpper()))
@@ -247,7 +253,7 @@ namespace CompunetCbte.Controllers
         //                    var email = workSheet.Cells[row, 5].Value.ToString().Trim();
         //                    var phoneNumber = workSheet.Cells[row, 6].Value.ToString().Trim();
         //                    var password = workSheet.Cells[row, 8].Value.ToString().Trim();
-                            
+
 
         //                    var store = new UserStore<ApplicationUser>(db);
         //                    var manager = new UserManager<ApplicationUser>(store);
@@ -278,7 +284,7 @@ namespace CompunetCbte.Controllers
         //    return View("Index");
         //}
 
-      
+
 
         public byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {
@@ -293,7 +299,7 @@ namespace CompunetCbte.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -10,14 +10,14 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+@*<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Course.CourseCode)
         </th>
         @*<th>
             @Html.DisplayNameFor(model => model.Level.LevelName)
-        </th>*@
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Question)
         </th>
@@ -55,7 +55,7 @@
         </td>
         @*<td>
             @Html.DisplayFor(modelItem => item.Level.LevelName)
-        </td>*@
+        </td>
         <td>
             @Html.Raw(item.Question)
         </td>
@@ -91,4 +91,43 @@
     </tr>
 }
 
+</table>*@
+<table id="Jdatatable" class="table table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Subject Code</th>
+            <th>Question</th>
+            <th>Option 1</th>
+            <th>Option 2</th>
+            <th>Option 3</th>
+            <th>Option 4</th>
+        </tr>
+    </thead>
 </table>
+
+@section Scripts{
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            $('#Jdatatable').DataTable({
+                "ajax": {
+                    "url": "/QuestionAnswers/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "CourseName", "autoWidth": true },
+                    { "data": "Question", "autoWidth": true },
+                    { "data": "Option1", "autoWidth": true },
+                    { "data": "Option2", "autoWidth": true },
+                    { "data": "Option3", "autoWidth": true },
+                    { "data": "Option4", "autoWidth": true },
+                    //{ "data": "City", "autoWidth": true },
+                    //{ "data": "PostalCode", "autoWidth": true }
+                ]
+            });
+        });
+
+    </script>
+}

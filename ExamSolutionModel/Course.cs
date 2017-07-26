@@ -30,6 +30,7 @@ namespace ExamSolutionModel
         public virtual ICollection<DepartmentCourse> DepartmentCourses { get; set; }
 
         public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; }
+        public virtual ICollection<StudentQuestion> StudentQuestions { get; set; }
         public virtual ICollection<ExamRule> ExamRules { get; set; }
 
         public virtual ICollection<ExamSetting> ExamSettings { get; set; }

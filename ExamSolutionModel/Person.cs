@@ -8,23 +8,13 @@ namespace ExamSolutionModel
 {
     public abstract class Person
     {
-        //[Required]
-        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        // [Required]
-        [StringLength(50, ErrorMessage = "Middle name cannot be longer than 50 characters.")]
-        [Display(Name = "Middle Name")]
-        public string MiddleName { get; set; }
-
-        //[Required]
-        [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-
+        [Required]
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
 
         public string Gender { get; set; }
+        public string LGA { get; set; }
+        public string State { get; set; }
 
         // [Required]
         [EmailAddress]
@@ -38,12 +28,7 @@ namespace ExamSolutionModel
         public string PhoneNumber { get; set; }
 
 
-        [Display(Name = "Full Name")]
-        public string UserName => LastName + " " + FirstName;
 
-        [Display(Name = "Full Name")]
-        public string FullName => LastName + " " + FirstName + " " + MiddleName;
-        
         public byte[] Passport { get; set; }
 
         [Display(Name = "Upload A Passport/Picture")]
@@ -68,10 +53,9 @@ namespace ExamSolutionModel
                     value.InputStream.CopyTo(target);
                     Passport = target.ToArray();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //logger.Error(ex.Message);
-                    //logger.Error(ex.StackTrace);
+                    var message = ex.Message;
                 }
             }
         }
